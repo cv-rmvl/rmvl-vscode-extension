@@ -1,0 +1,192 @@
+{
+    "Compile definition": {
+        "prefix": "rmvl_compile_definitions",
+        "body": [
+            "rmvl_compile_definitions(",
+            "  ${1:module_name}",
+            "  ${0:PUBLIC MY_DR}",
+            ")"
+        ],
+        "description": [
+            "将预处理定义添加至指定目标",
+            "用法:",
+            "rmvl_compile_definitions(<target>",
+            "  <INTERFACE | PUBLIC | PRIVATE> [items1...]",
+            "  [<INTERFACE | PUBLIC | PRIVATE> [items2...] ...])",
+            "示例:",
+            "rmvl_compile_definitions(",
+            "  aaa",
+            "  INTERFACE HAVE_AAA",
+            ")"
+        ]
+    },
+    "Install directories": {
+        "prefix": "rmvl_install_directories",
+        "body": [
+            "rmvl_install_directories(",
+            "  ${1:where_to_install}",
+            ")"
+        ],
+        "description": [
+            "将指定路径下的所有文件安装至特定目标",
+            "用法:",
+            "  rmvl_install_directories(<directory> [DST_LIB])",
+            "示例:",
+            "  rmvl_install_directories(include/rmvl)"
+        ]
+    },
+    "Add module": {
+        "prefix": "rmvl_add_module",
+        "body": [
+            "rmvl_add_module(",
+            "  ${1:module_name}",
+            "  DEPENDS ${0:core}",
+            ")"
+        ],
+        "description": [
+            "在当前目录中添加新的 RMVL 模块",
+            "用法:",
+            "  rmvl_add_module(<name> [INTERFACE] [EXTRA_HEADER <list of other include directories>]",
+            "    [EXTRA_SOURCE <list of other source directories>] [DEPENDS <list of rmvl dependencies>]",
+            "    [EXTERNAL <list of 3rd party dependencies>])",
+            "示例:",
+            "  rmvl_add_module(",
+            "    my_module               # 需要生成的模块 (文件夹名)",
+            "    EXTRA_HEADER xxx_h      # 参与构建的其余头文件目录",
+            "    EXTRA_SOURCE xxx_src    # 参与构建的其余头文件目录",
+            "    DEPENDS core            # 依赖的 RMVL 模块 (文件夹名)",
+            "    EXTERNAL ${OpenCV_LIBS} # 依赖的第三方目标库",
+            "  )"
+        ]
+    },
+    "Compile options": {
+        "prefix": "rmvl_compile_options",
+        "body": [
+            "rmvl_compile_options(",
+            "  ${1:module_name}",
+            "  ${SCOPE option}",
+            ")"
+        ],
+        "description": [
+            "将编译选项添加至指定目标",
+            "用法:",
+            "rmvl_compile_options(<target> [BEFORE]",
+            "  <INTERFACE|PUBLIC|PRIVATE> [items1...]",
+            "  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])",
+            "示例:",
+            "rmvl_compile_options(",
+            "  xxxx",
+            "  PRIVATE -w",
+            ")"
+        ]
+    },
+    "Add test": {
+        "prefix": "rmvl_add_test",
+        "body": [
+            "rmvl_add_test(",
+            "  ${1:test_name} ${0:Unit}",
+            "  DEPENDS ${1:module_name}",
+            "  DEPEND_TESTS ${0:GTest::gtest_main}",
+            ")"
+        ],
+        "description": [
+            "此命令用于为指定模块添加新的 RMVL 测试",
+            "用法:",
+            "rmvl_add_test(<name> <Unit|Performance> <DEPENDS> [rmvl_target...]",
+            "  <DEPEND_TESTS> [test_target...])",
+            "示例:",
+            "rmvl_add_test(",
+            "  detector Unit                  # 测试名",
+            "  DEPENDS armor_detector         # 需要依赖的 RMVL 目标库",
+            "  DEPEND_TESTS GTest::gtest_main # 需要依赖的第三方测试工具目标库",
+            ")"
+        ]
+    },
+    "Add executable": {
+        "prefix": "rmvl_add_exe",
+        "body": [
+            "rmvl_add_exe(",
+            "  ${1:sample_name} ${1:file_name}.cpp",
+            "  DEPENDS ${2:module_name}",
+            ")"
+        ],
+        "description": [
+            "此命令用于为指定模块添加新的 RMVL 可执行文件",
+            "用法:",
+            "rmvl_add_exe(<name> <file_name>",
+            "  [DEPENDS <list of rmvl dependencies>]",
+            "  [EXTERNAL <list of 3rd party dependencies>]",
+            ")",
+            "示例:",
+            "rmvl_add_exe(",
+            "  sample_armor_collection armor-collection.cpp",
+            "  DEPENDS mv_video_capture armor_detector",
+            ")"
+        ]
+    },
+    "Set properties": {
+        "prefix": "rmvl_set_properties",
+        "body": [
+            "rmvl_set_properties(",
+            "  ${1:module_name} PROPERTIES",
+            "  ${0:properties}",
+            ")"
+        ],
+        "description": [
+            "设置如何构建指定 Target 的属性",
+            "用法:",
+            "rmvl_set_properties(target1 target2 ...",
+            "          PROPERTIES prop1 value1",
+            "          prop2 value2 ...)",
+            "示例:",
+            "rmvl_set_properties(",
+            "  detector                   # 目标名",
+            "  PROPERTIES CXX_STANDARD 17 # 属性",
+            ")"
+        ]
+    },
+    "Download by GIT": {
+        "prefix": "rmvl_download",
+        "body": [
+            "rmvl_download(",
+            "  ${1:module_name} GIT",
+            "  ${0:https://github.com/xx/xx : v1.0}",
+            ")"
+        ],
+        "description": [
+            "下载并参与 RMVL 的构建",
+            "用法:",
+            "  rmvl_download(",
+            "    <dl_name> <dl_kind>",
+            "    <...>",
+            "  )",
+            "示例:",
+            "  rmvl_download(",
+            "    benchmark GIT",
+            "    xxx : master",
+            "  )"
+        ]
+    },
+    "Download by URL": {
+        "prefix": "rmvl_download",
+        "body": [
+            "rmvl_download(",
+            "  ${1:module_name} URL",
+            "  ${0:url}",
+            ")"
+        ],
+        "description": [
+            "下载并参与 RMVL 的构建",
+            "用法:",
+            "  rmvl_download(",
+            "    <dl_name> <dl_kind>",
+            "    <...>",
+            "  )",
+            "示例:",
+            "  rmvl_download(",
+            "    googletest URL",
+            "    xxx",
+            "  )"
+        ]
+    }
+}

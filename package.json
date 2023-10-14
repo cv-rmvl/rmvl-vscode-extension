@@ -1,0 +1,71 @@
+{
+    "name": "rmvl-vscode-extension",
+    "displayName": "RMVL Supported Extension",
+    "description": "RMVL extensions, including CMake extensions and parameter files",
+    "keywords": [
+        "rmvl",
+        "cmake",
+        "parameter"
+    ],
+    "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
+    },
+    "publisher": "zhaoxi",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": [
+        "Snippets",
+        "Programming Languages"
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "rmvl.para",
+                "aliases": [
+                    "RMVL Parameters"
+                ],
+                "extensions": [
+                    ".para"
+                ],
+                "configuration": "./language/rmvl.para.configuration.json",
+                "icon": {
+                    "dark": "./icons/rmvlpara.png",
+                    "light": "./icons/rmvlpara.png"
+                }
+            }
+        ],
+        "grammars": [
+            {
+                "language": "rmvl.para",
+                "scopeName": "source.rmvl.para",
+                "path": "./syntaxes/rmvl.para.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "cmake",
+                "path": "./snippets/rmvl.snippets.json"
+            }
+        ]
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "pretest": "npm run lint",
+        "test": "node ./test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.46.0",
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.0.0",
+        "@types/node": "^14.0.27",
+        "eslint": "^7.6.0",
+        "glob": "^7.1.6",
+        "mocha": "^8.1.3",
+        "typescript": "^4.0.2",
+        "vscode-test": "^1.4.0"
+    }
+}

@@ -1,0 +1,146 @@
+{
+    "name": "rmvl.para",
+    "scopeName": "source.rmvl.para",
+    "fileTypes": [
+        "para",
+        "rmvlpara"
+    ],
+    "patterns": [
+        {
+            "name": "meta.field.rmvl.para",
+            "begin": "^\\s*(string)\\b",
+            "beginCaptures": {
+                "1": {
+                    "name": "storage.type.rmvl.para"
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "begin": "=",
+                    "end": "(?=#|$)",
+                    "contentName": "string.unquoted.rmvl.para"
+                },
+                {
+                    "include": "#field"
+                }
+            ]
+        },
+        {
+            "name": "meta.field.rmvl.para",
+            "begin": "^\\s*(vector)\\b",
+            "beginCaptures": {
+                "1": {
+                    "name": "support.class"
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "begin": "<",
+                    "end": ">",
+                    "include": "#types"
+                },
+                {
+                    "include": "#field"
+                }
+            ]
+        },
+        {
+            "name": "meta.field.rmvl.para",
+            "begin": "^\\s*([/\\w]+)\\b",
+            "beginCaptures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#types"
+                        }
+                    ]
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#field"
+                }
+            ]
+        },
+        {
+            "name": "meta.field.rmvl.para",
+            "begin": "^\\s*({)\\b",
+            "beginCaptures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#types"
+                        }
+                    ]
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#field"
+                }
+            ]
+        },
+        {
+            "include": "#comments"
+        }
+    ],
+    "repository": {
+        "field": {
+            "patterns": [
+                {
+                    "include": "#comments"
+                },
+                {
+                    "include": "#identifier"
+                },
+                {
+                    "include": "#numeric-constant"
+                },
+                {
+                    "begin": "=",
+                    "end": "$",
+                    "patterns": [
+                        {
+                            "include": "#numeric-constant"
+                        },
+                        {
+                            "include": "#comments"
+                        }
+                    ]
+                }
+            ]
+        },
+        "comments": {
+            "match": "#.*",
+            "name": "comment.line.number-sign.rmvl.para"
+        },
+        "types": {
+            "patterns": [
+                {
+                    "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Mat|(Matx[0-9]{2}|Vec[0-9]|Point(2|3))(f|d)|Point)\\b",
+                    "name": "storage.type.rmvl.para"
+                },
+                {
+                    "match": "\\b(float(32|64)_t|bool|char)\\b",
+                    "name": "invalid.deprecated.rmvl.para"
+                },
+                {
+                    "match": "\\bvector\\b",
+                    "name": "support.class"
+                }
+            ]
+        },
+        "identifier": {
+            "match": "\\b[a-zA-Z]\\w+\\b",
+            "name": "variable.parameter"
+        },
+        "numeric-constant": {
+            "match": "\\b[+-]?[0-9]*\\.?[0-9]+([eE][+-]?\\d+)?\\b",
+            "name": "constant.numeric.rmvl.para"
+        }
+    }
+}
