@@ -62,24 +62,24 @@ function activate(context) {
         }
     });
 
-    ///////////////////////// RMVL Parameter /////////////////////////
-    const paraExtensionProvider = vscode.languages.registerCompletionItemProvider('rmvl.para', {
+    ///////////////////// RMVL Parameter Keyword /////////////////////
+    const rmvlparaKeywordsProvider = vscode.languages.registerCompletionItemProvider('rmvl.para', {
         provideCompletionItems() {
             // keyword
             const types = [
                 'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Mat', 'Point', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',
-                'float', 'double', 'string',
-                'Matx11f', 'Matx12f', 'Matx13f', 'Matx14f', 'Matx15f', 'Matx16f', 'Matx11d', 'Matx12d', 'Matx13d', 'Matx14d', 'Matx15d', 'Matx16d',
+                'float', 'double', 'string', 'Point2d', 'Point3d'
+
+            ];
+            // class or struct
+            const classLists = [
+                'vector', 'Matx11f', 'Matx12f', 'Matx13f', 'Matx14f', 'Matx15f', 'Matx16f', 'Matx11d', 'Matx12d', 'Matx13d', 'Matx14d', 'Matx15d', 'Matx16d',
                 'Matx21f', 'Matx22f', 'Matx23f', 'Matx24f', 'Matx25f', 'Matx26f', 'Matx21d', 'Matx22d', 'Matx23d', 'Matx24d', 'Matx25d', 'Matx26d',
                 'Matx31f', 'Matx32f', 'Matx33f', 'Matx34f', 'Matx35f', 'Matx36f', 'Matx31d', 'Matx32d', 'Matx33d', 'Matx34d', 'Matx35d', 'Matx36d',
                 'Matx41f', 'Matx42f', 'Matx43f', 'Matx44f', 'Matx45f', 'Matx46f', 'Matx41d', 'Matx42d', 'Matx43d', 'Matx44d', 'Matx45d', 'Matx46d',
                 'Matx51f', 'Matx52f', 'Matx53f', 'Matx54f', 'Matx55f', 'Matx56f', 'Matx51d', 'Matx52d', 'Matx53d', 'Matx54d', 'Matx55d', 'Matx56d',
                 'Matx61f', 'Matx62f', 'Matx63f', 'Matx64f', 'Matx65f', 'Matx66f', 'Matx61d', 'Matx62d', 'Matx63d', 'Matx64d', 'Matx65d', 'Matx66d',
-                'Vec2f', 'Vec3f', 'Vec4f', 'Vec5f', 'Vec6f', 'Point2f', 'Point3f', 'Vec2d', 'Vec3d', 'Vec4d', 'Vec5d', 'Vec6d', 'Point2d', 'Point3d'
-
-            ];
-            // class or struct
-            const classLists = ['vector'];
+                'Vec2f', 'Vec3f', 'Vec4f', 'Vec5f', 'Vec6f', 'Point2f', 'Point3f', 'Vec2d', 'Vec3d', 'Vec4d', 'Vec5d', 'Vec6d'];
             // return value
             const completionItems = [];
 
@@ -100,7 +100,7 @@ function activate(context) {
                 "vector<Point> POINTS_DEMO = {{1, 1}, \\\n" +
                 "                             {-2, 30}, \\\n" +
                 "                             {3, 7}} # vector 表示的点集示例\n" +
-                "Vec3d VEC3F_DEMO = {3.1, 2.2, 1.3}   # 向量示例\n" + 
+                "Vec3d VEC3F_DEMO = {3.1, 2.2, 1.3}   # 向量示例\n" +
                 "################################################\n"
             );
             paraSnippet.documentation = new vscode.MarkdownString("显示 RMVL Parameters 的示例代码");
@@ -111,8 +111,49 @@ function activate(context) {
         }
     });
 
+    //////////////////// RMVL Parameter Functions ////////////////////
+    const rmvlparaFunctionsProvider = vscode.languages.registerCompletionItemProvider('rmvl.para', {
+        provideCompletionItems(document, position) {
+            const line = document.lineAt(position.line).text;
+            const prefixReg = line.match(/(Matx[0-9]{2}|Vec[0-9])[fd]::/g);
+            const prefix = prefixReg[prefixReg.length - 1];
+            const prefixIndex = line.lastIndexOf(prefix, position.character);
+            if (prefixIndex === -1 || prefixIndex !== position.character - prefix.length) {
+                return undefined;
+            }
+            const eyeMethod = new vscode.CompletionItem('eye', vscode.CompletionItemKind.Method);
+            eyeMethod.documentation = new vscode.MarkdownString('单位矩阵');
+            const diagMethod = new vscode.CompletionItem('diag', vscode.CompletionItemKind.Method);
+            diagMethod.documentation = new vscode.MarkdownString('对角矩阵');
+            diagMethod.insertText = new vscode.SnippetString('diag(\{${0}\})');
+            const onesMethod = new vscode.CompletionItem('ones', vscode.CompletionItemKind.Method);
+            onesMethod.documentation = new vscode.MarkdownString('将所有元素全部置 `1`');
+            const zerosMethod = new vscode.CompletionItem('zeros', vscode.CompletionItemKind.Method);
+            zerosMethod.documentation = new vscode.MarkdownString('将所有元素全部置 `0`');
+            return [eyeMethod, diagMethod, onesMethod, zerosMethod];
+        }
+    }, ':'); // triggered whenever a ':' is being typed
+
+    /////////////////////////// Characters ///////////////////////////
+    const charactersExtensionProvider = vscode.languages.registerCompletionItemProvider('rmvl.para', {
+        provideCompletionItems(document, position) {
+            if (document.lineAt(position).text.substring(0, position.character).endsWith('(')) {
+                vscode.window.activeTextEditor.insertSnippet(
+                    new vscode.SnippetString('${0})')
+                );
+            }
+            return undefined;
+        }
+    }, '(');
+
+
     context.subscriptions.push(
-        cmakeExtensionProvider, paraExtensionProvider
+        // CMake 支持
+        cmakeExtensionProvider,
+        // RMVL Parameter
+        rmvlparaKeywordsProvider, rmvlparaFunctionsProvider,
+        // 符号扩展
+        charactersExtensionProvider
     );
 }
 

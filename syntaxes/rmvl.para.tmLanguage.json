@@ -28,7 +28,7 @@
         },
         {
             "name": "meta.field.rmvl.para",
-            "begin": "^\\s*(vector)\\b",
+            "begin": "^\\s*(vector|(Matx[0-9]{2}|Vec[0-9])[fd])\\b",
             "beginCaptures": {
                 "1": {
                     "name": "support.class"
@@ -54,6 +54,9 @@
                     "patterns": [
                         {
                             "include": "#types"
+                        },
+                        {
+                            "include": "#numeric-constant"
                         }
                     ]
                 }
@@ -103,6 +106,9 @@
                         },
                         {
                             "include": "#comments"
+                        },
+                        {
+                            "include": "#types"
                         }
                     ]
                 }
@@ -115,7 +121,7 @@
         "types": {
             "patterns": [
                 {
-                    "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Mat|(Matx[0-9]{2}|Vec[0-9]|Point(2|3))(f|d)|Point)\\b",
+                    "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Mat|Point[23][fd]|Point)\\b",
                     "name": "storage.type.rmvl.para"
                 },
                 {
@@ -123,8 +129,12 @@
                     "name": "invalid.deprecated.rmvl.para"
                 },
                 {
-                    "match": "\\bvector\\b",
+                    "match": "\\b(vector|(Matx[0-9]{2}|Vec[0-9])[fd])\\b",
                     "name": "support.class"
+                },
+                {
+                    "match": "\\b(diag|zeros|ones|eye)\\b",
+                    "name": "support.function"
                 }
             ]
         },
