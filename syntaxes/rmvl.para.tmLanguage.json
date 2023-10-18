@@ -139,7 +139,7 @@
             ]
         },
         "identifier": {
-            "match": "\\b[a-zA-Z]\\w+\\b",
+            "match": "\\b[a-zA-Z](\\w+)?\\b",
             "name": "variable.parameter"
         },
         "numeric-constant": {
