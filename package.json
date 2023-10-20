@@ -8,7 +8,7 @@
         "cmake",
         "parameter"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "repository": {
         "type": "git",
         "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
@@ -23,6 +23,18 @@
     ],
     "main": "./src/extension.js",
     "contributes": {
+        "commands": [
+            {
+                "title": "这是什么",
+                "category": "RMVL",
+                "command": "rmvl.command.what"
+            },
+            {
+                "title": "查阅 RMVL",
+                "category": "RMVL",
+                "command": "rmvl.command.search"
+            }
+        ],
         "languages": [
             {
                 "id": "rmvl.para",

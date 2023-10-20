@@ -1,6 +1,67 @@
 const vscode = require('vscode');
 
 function activate(context) {
+    //////////////////////////// Commands ////////////////////////////
+    const commandWhatProvider = vscode.commands.registerCommand('rmvl.command.what', function () {
+        const panel = vscode.window.createWebviewPanel('rmvlHelpIndex', 'RMVL 扩展使用说明', vscode.ViewColumn.One, {});
+        // Load help page content here
+        panel.webview.html = `
+            <html>
+            <style>
+              h1 {
+                color: 888;
+                font-size: 24px;
+                margin-bottom: 16px;
+              }
+              ul {
+                list-style-type: disc;
+                padding-left: 20px;
+                margin: 0;
+              }
+              li + li {
+                margin-top: 8px;
+              }
+              a {
+                color: #007acc;
+                text-decoration: none;
+              }
+            </style>
+            <body>
+              <h1>RMVL 扩展使用说明</h1>
+              <h4>为谁提供服务？</h4>
+              <p>该扩展为 <span style="color: orange">RMVL</span> 项目提供服务，有关 RMVL 的介绍可参考下面的内容：</p>
+              <ul>
+                <li><a href="https://vision.scutbot.cn/rmvl/master/">RMVL 说明文档首页</a></li>
+                <li><a href="https://vision.scutbot.cn/rmvl/master/d1/dfb/intro.html">RMVL 简介</a></li>
+                <li><a href="https://github.com/cv-rmvl/rmvl">Github 地址</a></li>
+              </ul>
+              <h4>该扩展插件支持什么操作？</h4>
+              <p>RMVL 部分 CMake 函数</p>
+              <ul>
+                <li>提供了一组形如 <span style="color: orange">rmvl_*</span> 的函数</li>
+                <li>代码块：<span style="color: orange">RMVL</span> ，输入即可快速包含必要的包</li>
+                <li>输入：<span style="color: orange">Ctrl + I</span> 或使用 <span style="color: orange">Ctrl + Shift + P</span> 键入 Trigger Suggest 可触发建议
+              </ul>
+              <p>RMVL Parameter 参数规范文件语法</p5>
+              <ul>
+                <li>包含基本的类型、变量定义、内置成员函数的语法高亮与补全</li>
+                <li>代码块：<span style="color: orange">ParaHelp</span> ，输入即可快速浏览示例代码</li>
+                <li>输入：<span style="color: orange">Ctrl + I</span> 或使用 <span style="color: orange">Ctrl + Shift + P</span> 键入 Trigger Suggest 可触发建议
+              </ul>
+            </body>
+            </html>`;
+    });
+
+    const commandSearchProvider = vscode.commands.registerCommand('rmvl.command.search', async function () {
+        const answer = await vscode.window.showInformationMessage('要查阅 RMVL 的内容', '文档手册', '源代码', '发行说明');
+        if (answer === '文档手册')
+            vscode.commands.executeCommand('vscode.open', 'https://vision.scutbot.cn/rmvl/master');
+        else if (answer === '源代码')
+            vscode.commands.executeCommand('vscode.open', 'https://github.com/cv-rmvl/rmvl');
+        else if (answer === '发行说明')
+            vscode.commands.executeCommand('vscode.open', 'https://github.com/cv-rmvl/rmvl/wiki/ChangeLog');
+    });
+
     ///////////////////////// CMake for RMVL /////////////////////////
     const cmakeFunctionsProvider = vscode.languages.registerCompletionItemProvider('cmake', {
         provideCompletionItems() {
@@ -159,6 +220,8 @@ function activate(context) {
     }, '(');
 
     context.subscriptions.push(
+        // 命令
+        commandWhatProvider, commandSearchProvider,
         // RMVL CMake 扩展
         cmakeFunctionsProvider,
         // RMVL Parameter 扩展
