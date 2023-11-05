@@ -121,7 +121,7 @@
         "types": {
             "patterns": [
                 {
-                    "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Mat|Point[23][fd]|Point)\\b",
+                    "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Point[23][fd]|Point)\\b",
                     "name": "storage.type.rmvl.para"
                 },
                 {

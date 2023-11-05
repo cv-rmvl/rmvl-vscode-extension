@@ -152,9 +152,8 @@ function activate(context) {
         provideCompletionItems() {
             // keyword
             const types = [
-                'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Mat', 'Point', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',
+                'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Point', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',
                 'float', 'double', 'string', 'Point2d', 'Point3d'
-
             ];
             // class or struct
             const classLists = [
