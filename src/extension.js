@@ -117,9 +117,9 @@ function activate(context) {
             // 初始化并包含 RMVL
             const includeRMVL = new vscode.CompletionItem('RMVL', vscode.CompletionItemKind.Snippet);
             includeRMVL.insertText = new vscode.SnippetString(
-                `# include rmvl\nfind_package(RMVL REQUIRED)\nlist(APPEND CMAKE_MODULE_PATH \\\${RMVL_DIR})\n# use rmvl functions and macros\ninclude(RMVLModule)\ninclude(RMVLUtils)\n\n`
+                `# include rmvl\nfind_package(RMVL REQUIRED)\nlist(APPEND CMAKE_MODULE_PATH \\\${RMVL_DIR})\n# use rmvl functions and macros\ninclude(RMVLUtils)\nset(para_template_path \"\\\${RMVL_DIR}/templates\" CACHE STRING "GenPara template path")\ninclude(RMVLGenPara)\ninclude(RMVLModule)\n`
             );
-            includeRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL，并包含相关模块，包含\n- \`RMVLModule\``);
+            includeRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL，并包含相关模块，包含\n- \`RMVLUtils\`\n- \`RMVLGenPara\`\n- \`RMVLModule\``);
 
             return [
                 rmvlCompileDefinition, rmvlInstallDirectories, rmvlAddModule, rmvlCompileOptions,
