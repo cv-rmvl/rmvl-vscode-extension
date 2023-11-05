@@ -106,7 +106,7 @@ function activate(context) {
             const rmvlSetProperties = new vscode.CompletionItem('rmvl_set_properties', vscode.CompletionItemKind.Function);
             rmvlSetProperties.insertText = new vscode.SnippetString('rmvl_set_properties(\n  ${1:module_name} PROPERTIES\n  ${2:properties}\n)');
             rmvlSetProperties.documentation = new vscode.MarkdownString(
-                `设置如何构建指定 Target 的属性\n用法:\n\`\`\`\nrmvl_set_properties(target1 target2 ...\n  PROPERTIES prop1 value1\n  prop2 value2 ...)\n\`\`\`\n示例:\n\`\`\`\nrmvl_set_properties(\n  detector                   # 目标名\n  PROPERTIES CXX_STANDARD 17 # 属性\n)\n\`\`\``
+                `#### 设置如何构建指定 Target 的属性\n#### 用法:\n\`\`\`\nrmvl_set_properties(target1 target2 ...\n  PROPERTIES prop1 value1\n  prop2 value2 ...)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_set_properties(\n  detector                   # 目标名\n  PROPERTIES CXX_STANDARD 17 # 属性\n)\n\`\`\``
             );
             // download
             const rmvlDownload = new vscode.CompletionItem('rmvl_download', vscode.CompletionItemKind.Function);
@@ -114,17 +114,35 @@ function activate(context) {
             rmvlDownload.documentation = new vscode.MarkdownString(
                 `#### 下载并参与 RMVL 的构建\n##### 用法:\n\`\`\`\nrmvl_download(\n  <dl_name> <dl_kind>\n  <...>\n)\n\`\`\`\n##### 示例 1:\n\`\`\`\nrmvl_download(\n  benchmark GIT\nxxx : master # 仓库地址与分支/标签名\n)\n\`\`\`\n##### 示例 2\n\`\`\`\nrmvl_download(\n  googletest URL\n  xxx # 要下载的路径（一般是压缩文件）\n)\n\`\`\``
             );
+            // system date
+            const systemDate = new vscode.CompletionItem(`system_date`, vscode.CompletionItemKind.Function);
+            systemDate.insertText = new vscode.SnippetString(`system_date(output_year output_month output_day)`);
+            systemDate.documentation = new vscode.MarkdownString(
+                `#### 获取系统日期\n#### 用法:\n\`\`\`\nsystem_date(\n  <output year> <output month> <output day>\n)\n\`\`\`\n#### 示例:\n\`\`\`\nsystem_date(\n  year  # 年份，格式为 yyyy\n  month # 月份，格式为 mm\n  day   # 日期，格式为 dd\n)\n\`\`\``
+            );
+            // generate para
+            const rmvlGeneratePara = new vscode.CompletionItem(`rmvl_generate_para`, vscode.CompletionItemKind.Function);
+            rmvlGeneratePara.insertText = new vscode.SnippetString(`rmvl_generate_para(\n    \${1:target_name}\n    MODULE \${2:module_name}\n)`);
+            rmvlGeneratePara.documentation = new vscode.MarkdownString(
+                `#### 根据指定的目标名在 param 文件夹下对应的 *.para 参数规范文件和可选的模块名生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_para(\n  <target_name>\n  [MODULE module_name]\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_para(\n  mytarget        # 目标名称\n  MODULE mymodule # 模块名称为 mymodule\n)\n\`\`\``
+            );
+            // generate module para
+            const rmvlGenerateModulePara = new vscode.CompletionItem(`rmvl_generate_module_para`, vscode.CompletionItemKind.Function);
+            rmvlGenerateModulePara.insertText = new vscode.SnippetString(`rmvl_generate_module_para(\${1:module_name})`);
+            rmvlGenerateModulePara.documentation = new vscode.MarkdownString(
+                `#### 根据给定模块下所有的 para 目标，生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_module_para(\n  <module_name>\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_module_para(module_name) # 模块名\n\`\`\``
+            );
             // 初始化并包含 RMVL
-            const includeRMVL = new vscode.CompletionItem('RMVL', vscode.CompletionItemKind.Snippet);
-            includeRMVL.insertText = new vscode.SnippetString(
+            const findRMVL = new vscode.CompletionItem('FindRMVL', vscode.CompletionItemKind.Module);
+            findRMVL.insertText = new vscode.SnippetString(
                 `# include rmvl\nfind_package(RMVL REQUIRED)\nlist(APPEND CMAKE_MODULE_PATH \\\${RMVL_DIR})\n# use rmvl functions and macros\ninclude(RMVLUtils)\nset(para_template_path \"\\\${RMVL_DIR}/templates\" CACHE STRING "GenPara template path")\ninclude(RMVLGenPara)\ninclude(RMVLModule)\n`
             );
-            includeRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL，并包含相关模块，包含\n- \`RMVLUtils\`\n- \`RMVLGenPara\`\n- \`RMVLModule\``);
+            findRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL，并包含相关模块，包含\n- \`RMVLUtils\`\n- \`RMVLGenPara\`\n- \`RMVLModule\``);
 
             return [
                 rmvlCompileDefinition, rmvlInstallDirectories, rmvlAddModule, rmvlCompileOptions,
                 rmvlAddTest, rmvlAddExe, rmvlSetProperties, rmvlDownload,
-                includeRMVL
+                systemDate, rmvlGeneratePara, rmvlGenerateModulePara, findRMVL
             ];
         }
     });
