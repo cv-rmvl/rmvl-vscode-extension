@@ -8,7 +8,7 @@
         "cmake",
         "parameter"
     ],
-    "version": "1.0.4",
+    "version": "1.1.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
@@ -22,6 +22,9 @@
         "Programming Languages"
     ],
     "main": "./src/extension.js",
+    "activationEvents": [
+        "onLanguage:cmake"
+    ],
     "contributes": {
         "commands": [
             {
