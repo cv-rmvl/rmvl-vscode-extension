@@ -133,7 +133,7 @@
                     "name": "support.class"
                 },
                 {
-                    "match": "\\b(diag|zeros|ones|eye)\\b",
+                    "match": "\\b(diag|zeros|ones|eye|all|randu|randn)\\b",
                     "name": "support.function"
                 }
             ]

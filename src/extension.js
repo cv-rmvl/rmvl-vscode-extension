@@ -152,8 +152,8 @@ function activate(context) {
         provideCompletionItems() {
             // keyword
             const types = [
-                'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Point', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',
-                'float', 'double', 'string', 'Point2d', 'Point3d'
+                'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Point', 'uint8_t', 'uint16_t', 'uint32_t',
+                'uint64_t', 'float', 'double', 'string', 'Point2f', 'Point3f', 'Point2d', 'Point3d', 
             ];
             // class or struct
             const classLists = [
@@ -163,7 +163,7 @@ function activate(context) {
                 'Matx41f', 'Matx42f', 'Matx43f', 'Matx44f', 'Matx45f', 'Matx46f', 'Matx41d', 'Matx42d', 'Matx43d', 'Matx44d', 'Matx45d', 'Matx46d',
                 'Matx51f', 'Matx52f', 'Matx53f', 'Matx54f', 'Matx55f', 'Matx56f', 'Matx51d', 'Matx52d', 'Matx53d', 'Matx54d', 'Matx55d', 'Matx56d',
                 'Matx61f', 'Matx62f', 'Matx63f', 'Matx64f', 'Matx65f', 'Matx66f', 'Matx61d', 'Matx62d', 'Matx63d', 'Matx64d', 'Matx65d', 'Matx66d',
-                'Vec2f', 'Vec3f', 'Vec4f', 'Vec5f', 'Vec6f', 'Point2f', 'Point3f', 'Vec2d', 'Vec3d', 'Vec4d', 'Vec5d', 'Vec6d'];
+                'Vec2f', 'Vec3f', 'Vec4f', 'Vec5f', 'Vec6f', 'Vec2d', 'Vec3d', 'Vec4d', 'Vec5d', 'Vec6d'];
             // return value
             const completionItems = [];
 
@@ -211,30 +211,45 @@ function activate(context) {
             if (prefixIndex === -1 || prefixIndex !== position.character - prefix.length) {
                 return undefined;
             }
+            // eye()
             const eyeMethod = new vscode.CompletionItem('eye', vscode.CompletionItemKind.Method);
             eyeMethod.documentation = new vscode.MarkdownString('单位矩阵');
+            eyeMethod.insertText = new vscode.SnippetString('eye()');
+            // diag()
             const diagMethod = new vscode.CompletionItem('diag', vscode.CompletionItemKind.Method);
-            diagMethod.documentation = new vscode.MarkdownString('对角矩阵');
-            diagMethod.insertText = new vscode.SnippetString('diag(\{${0}\})');
+            diagMethod.documentation = new vscode.MarkdownString(
+                `对角矩阵，例如\n\`\`\`\nMatx33f::diag({1.2, -2.1, 4})\n\`\`\`\n生成的矩阵为\n\`\`\`\n┌ 1.2   0   0 ┐\n│  0  -2.1  0 │\n└  0    0   4 ┘\n\`\`\`\n`
+            );
+            diagMethod.insertText = new vscode.SnippetString('diag(\{${1}\})');
+            // ones()
             const onesMethod = new vscode.CompletionItem('ones', vscode.CompletionItemKind.Method);
             onesMethod.documentation = new vscode.MarkdownString('将所有元素全部置 `1`');
+            onesMethod.insertText = new vscode.SnippetString('ones()');
+            // zeros()
             const zerosMethod = new vscode.CompletionItem('zeros', vscode.CompletionItemKind.Method);
             zerosMethod.documentation = new vscode.MarkdownString('将所有元素全部置 `0`');
-            return [eyeMethod, diagMethod, onesMethod, zerosMethod];
+            zerosMethod.insertText = new vscode.SnippetString('zeros()');
+            // all()
+            const allMethod = new vscode.CompletionItem('all', vscode.CompletionItemKind.Method);
+            allMethod.documentation = new vscode.MarkdownString(
+                `将所有元素全部设置为一个值，例如\n\`\`\`\nMatx33f::all(3.1)\n\`\`\`\n将矩阵的所有元素设置为 \`3.1\``
+            );
+            allMethod.insertText = new vscode.SnippetString('all(${1})');
+            // randu()
+            const randuMethod = new vscode.CompletionItem('randu', vscode.CompletionItemKind.Method);
+            randuMethod.documentation = new vscode.MarkdownString(
+                `矩阵的每一个元素均服从均匀分布，例如\n\`\`\`\nMatx33f::randu(0, 1)\n\`\`\`\n生成矩阵的每一个元素均服从 \`[0, 1)\` 上的均匀分布`
+            );
+            randuMethod.insertText = new vscode.SnippetString('randu(${1}, ${2})');
+            // randu()
+            const randnMethod = new vscode.CompletionItem('randn', vscode.CompletionItemKind.Method);
+            randnMethod.documentation = new vscode.MarkdownString(
+                `矩阵的每一个元素均服从正态分布，例如\n\`\`\`\nMatx33f::randn(0, 1)\n\`\`\`\n生成矩阵的每一个元素均服从均值为 \`0\`，方差为 \`1\` 的正态分布`
+            );
+            randnMethod.insertText = new vscode.SnippetString('randn(${1}, ${2})');
+            return [eyeMethod, diagMethod, onesMethod, zerosMethod, allMethod, randuMethod, randnMethod];
         }
-    }, ':'); // triggered whenever a ':' is being typed
-
-    ///////////////////////// Characters '(' /////////////////////////
-    const charactersProvider = vscode.languages.registerCompletionItemProvider('rmvl.para', {
-        provideCompletionItems(document, position) {
-            if (document.lineAt(position).text.substring(0, position.character).endsWith('(')) {
-                vscode.window.activeTextEditor.insertSnippet(
-                    new vscode.SnippetString('${0})')
-                );
-            }
-            return undefined;
-        }
-    }, '(');
+    }, ':');
 
     context.subscriptions.push(
         // 命令
@@ -242,9 +257,7 @@ function activate(context) {
         // RMVL CMake 扩展
         cmakeFunctionsProvider,
         // RMVL Parameter 扩展
-        rmvlparaKeywordsProvider, rmvlparaFunctionsProvider,
-        // 符号扩展
-        charactersProvider
+        rmvlparaKeywordsProvider, rmvlparaFunctionsProvider
     );
 }
 
