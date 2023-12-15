@@ -1,55 +1,35 @@
 const vscode = require('vscode');
+const { posix } = require('path');
+const fs = require('fs');
+
+/**
+ * 从某个 HTML 文件读取能被 Webview 加载的 HTML 内容
+ * @param {*} context 上下文
+ * @param {*} templatePath 相对于插件根目录的 `*.html` 文件相对路径
+ */
+function getWebViewContent(context, templatePath) {
+    const resourcePath = posix.join(context.extensionPath, templatePath);
+    const dirPath = posix.dirname(resourcePath);
+    let html = fs.readFileSync(resourcePath, 'utf-8');
+    // vscode 不支持直接加载本地资源，需要替换成其专有路径格式，这里只是简单的将样式和 JS 的路径替换
+    html = html.replace(
+        /(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g,
+        (m, $1, $2) => {
+            return ($1 + vscode.Uri.file(posix.resolve(dirPath, $2))
+                .with({ scheme: 'vscode-resource' }).toString() + '"'
+            );
+        }
+    );
+    return html;
+}
 
 function activate(context) {
     //////////////////////////// Commands ////////////////////////////
     const commandWhatProvider = vscode.commands.registerCommand('rmvl.command.what', function () {
-        const panel = vscode.window.createWebviewPanel('rmvlHelpIndex', 'RMVL 扩展使用说明', vscode.ViewColumn.One, {});
-        // Load help page content here
-        panel.webview.html = `
-            <html>
-            <style>
-              h1 {
-                color: 888;
-                font-size: 24px;
-                margin-bottom: 16px;
-              }
-              ul {
-                list-style-type: disc;
-                padding-left: 20px;
-                margin: 0;
-              }
-              li + li {
-                margin-top: 8px;
-              }
-              a {
-                color: #007acc;
-                text-decoration: none;
-              }
-            </style>
-            <body>
-              <h1>RMVL 扩展使用说明</h1>
-              <h4>为谁提供服务？</h4>
-              <p>该扩展为 <span style="color: orange">RMVL</span> 项目提供服务，有关 RMVL 的介绍可参考下面的内容：</p>
-              <ul>
-                <li><a href="https://vision.scutbot.cn/rmvl/master/">RMVL 说明文档首页</a></li>
-                <li><a href="https://vision.scutbot.cn/rmvl/master/d1/dfb/intro.html">RMVL 简介</a></li>
-                <li><a href="https://github.com/cv-rmvl/rmvl">Github 地址</a></li>
-              </ul>
-              <h4>该扩展插件支持什么操作？</h4>
-              <p>RMVL 部分 CMake 函数</p>
-              <ul>
-                <li>提供了一组形如 <span style="color: orange">rmvl_*</span> 的函数</li>
-                <li>代码块：<span style="color: orange">RMVL</span> ，输入即可快速包含必要的包</li>
-                <li>输入：<span style="color: orange">Ctrl + I</span> 或使用 <span style="color: orange">Ctrl + Shift + P</span> 键入 Trigger Suggest 可触发建议
-              </ul>
-              <p>RMVL Parameter 参数规范文件语法</p5>
-              <ul>
-                <li>包含基本的类型、变量定义、内置成员函数的语法高亮与补全</li>
-                <li>代码块：<span style="color: orange">ParaHelp</span> ，输入即可快速浏览示例代码</li>
-                <li>输入：<span style="color: orange">Ctrl + I</span> 或使用 <span style="color: orange">Ctrl + Shift + P</span> 键入 Trigger Suggest 可触发建议
-              </ul>
-            </body>
-            </html>`;
+        const panel = vscode.window.createWebviewPanel('rmvlHelpIndex', 'RMVL 扩展使用说明', vscode.ViewColumn.One, {
+            enableScripts: true
+        });
+        panel.webview.html = getWebViewContent(context, 'src/rmvl.command.what.html');
     });
 
     const commandSearchProvider = vscode.commands.registerCommand('rmvl.command.search', async function () {
@@ -112,7 +92,7 @@ function activate(context) {
             const rmvlDownload = new vscode.CompletionItem('rmvl_download', vscode.CompletionItemKind.Function);
             rmvlDownload.insertText = new vscode.SnippetString('rmvl_download(\n  ${2:module_name} ${1|GIT,URL|}\n  ${0:address_git_or_url}\n)');
             rmvlDownload.documentation = new vscode.MarkdownString(
-                `#### 下载并参与 RMVL 的构建\n##### 用法:\n\`\`\`\nrmvl_download(\n  <dl_name> <dl_kind>\n  <...>\n)\n\`\`\`\n##### 示例 1:\n\`\`\`\nrmvl_download(\n  benchmark GIT\nxxx : master # 仓库地址与分支/标签名\n)\n\`\`\`\n##### 示例 2\n\`\`\`\nrmvl_download(\n  googletest URL\n  xxx # 要下载的路径（一般是压缩文件）\n)\n\`\`\``
+                `#### 下载并参与 RMVL 的构建\n##### 用法:\n\`\`\`\nrmvl_download(\n  <dl_name> <dl_kind>\n  <...>\n)\n\`\`\`\n##### 示例 1:\n\`\`\`\nrmvl_download(\n  benchmark GIT\n  xxx : master # 仓库地址与分支/标签名\n)\n\`\`\`\n##### 示例 2\n\`\`\`\nrmvl_download(\n  googletest URL\n  xxx # 要下载的路径（一般是压缩文件）\n)\n\`\`\``
             );
             // system date
             const systemDate = new vscode.CompletionItem(`system_date`, vscode.CompletionItemKind.Function);
@@ -122,7 +102,7 @@ function activate(context) {
             );
             // generate para
             const rmvlGeneratePara = new vscode.CompletionItem(`rmvl_generate_para`, vscode.CompletionItemKind.Function);
-            rmvlGeneratePara.insertText = new vscode.SnippetString(`rmvl_generate_para(\n    \${1:target_name}\n    MODULE \${2:module_name}\n)`);
+            rmvlGeneratePara.insertText = new vscode.SnippetString(`rmvl_generate_para(\n  \${1:target_name}\n  MODULE \${2:module_name}\n)`);
             rmvlGeneratePara.documentation = new vscode.MarkdownString(
                 `#### 根据指定的目标名在 param 文件夹下对应的 *.para 参数规范文件和可选的模块名生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_para(\n  <target_name>\n  [MODULE module_name]\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_para(\n  mytarget        # 目标名称\n  MODULE mymodule # 模块名称为 mymodule\n)\n\`\`\``
             );
@@ -132,6 +112,19 @@ function activate(context) {
             rmvlGenerateModulePara.documentation = new vscode.MarkdownString(
                 `#### 根据给定模块下所有的 para 目标，生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_module_para(\n  <module_name>\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_module_para(module_name) # 模块名\n\`\`\``
             );
+            // link directories
+            const rmvlLinkDirectories = new vscode.CompletionItem(`rmvl_link_directories`, vscode.CompletionItemKind.Function);
+            rmvlLinkDirectories.insertText = new vscode.SnippetString(`rmvl_link_directories(\n  \${1:module_name}\n  \${2|PUBLIC,INTERFACE,PRIVATE|} \${3:path_to_libs}\n)`);
+            rmvlLinkDirectories.documentation = new vscode.MarkdownString(
+                `#### 将指定目录添加至运行时动态库链接的搜索路径\n#### 用法:\n\`\`\`\nrmvl_link_directories(<target> [BEFORE]\n  <INTERFACE|PUBLIC|PRIVATE> [items1...]\n  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_link_directories(\n  my_module              # RMVL 目标名\n  PRIVATE /path/to/mylib # 链接库的路径\n)\n\`\`\``
+            );
+            // link libraries
+            const rmvlLinkLibraries = new vscode.CompletionItem(`rmvl_link_libraries`, vscode.CompletionItemKind.Function);
+            rmvlLinkLibraries.insertText = new vscode.SnippetString(`rmvl_link_libraries(\n  \${1:module_name}\n  \${2|PUBLIC,INTERFACE,PRIVATE|} \${3:mylibs}\n)`);
+            rmvlLinkLibraries.documentation = new vscode.MarkdownString(
+                `#### 将指定目标链接至指定的库\n#### 用法:\n\`\`\`\nrmvl_link_libraries(<target> [BEFORE]\n  <INTERFACE|PUBLIC|PRIVATE> [items1...]\n  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_link_libraries(\n  my_module    # RMVL 目标名\n  PUBLIC mylib # 链接库的名称\n)\n\`\`\`\n#### 注意:\n若使用 RMVL 目标，需要引入 rmvl_ 前缀，例如\n\`\`\`\nrmvl_link_libraries(\n  my_module\n  PUBLIC rmvl_core\n)\n\`\`\``
+            );
+
             // 初始化并包含 RMVL
             const findRMVL = new vscode.CompletionItem('FindRMVL', vscode.CompletionItemKind.Module);
             findRMVL.insertText = new vscode.SnippetString(
@@ -141,8 +134,8 @@ function activate(context) {
 
             return [
                 rmvlCompileDefinition, rmvlInstallDirectories, rmvlAddModule, rmvlCompileOptions,
-                rmvlAddTest, rmvlAddExe, rmvlSetProperties, rmvlDownload,
-                systemDate, rmvlGeneratePara, rmvlGenerateModulePara, findRMVL
+                rmvlAddTest, rmvlAddExe, rmvlSetProperties, rmvlDownload, systemDate, rmvlGeneratePara,
+                rmvlGenerateModulePara, rmvlLinkDirectories, rmvlLinkLibraries, findRMVL
             ];
         }
     });
@@ -153,7 +146,7 @@ function activate(context) {
             // keyword
             const types = [
                 'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Point', 'uint8_t', 'uint16_t', 'uint32_t',
-                'uint64_t', 'float', 'double', 'string', 'Point2f', 'Point3f', 'Point2d', 'Point3d', 
+                'uint64_t', 'float', 'double', 'string', 'Point2f', 'Point3f', 'Point2d', 'Point3d',
             ];
             // class or struct
             const classLists = [

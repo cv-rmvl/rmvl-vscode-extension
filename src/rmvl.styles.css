@@ -1,0 +1,20 @@
+h1 {
+    color: 888;
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+li+li {
+    margin-top: 8px;
+}
+
+a {
+    color: #007accef;
+    text-decoration: none;
+}
