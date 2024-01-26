@@ -8,7 +8,7 @@
         "cmake",
         "parameter"
     ],
-    "version": "1.1.1",
+    "version": "1.2.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
@@ -57,7 +57,7 @@
                 "extensions": [
                     ".para"
                 ],
-                "configuration": "./language/rmvl.para.configuration.json",
+                "configuration": "./languages/rmvl.para.configuration.json",
                 "icon": {
                     "dark": "./icons/rmvlpara.png",
                     "light": "./icons/rmvlpara.png"

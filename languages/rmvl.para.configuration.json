@@ -12,12 +12,16 @@
         { "open": "{", "close": "}" },
         { "open": "<", "close": ">" },
         { "open": "[", "close": "]" },
-        { "open": "(", "close": ")" }
+        { "open": "(", "close": ")" },
+        { "open": "'", "close": "'", "notIn": ["string", "comments"]},
+        { "open": "\"", "close": "\"", "notIn": ["string", "comments"]}
     ],
     "surroundingPairs": [
         [ "{", "}" ],
         [ "<", ">" ],
         [ "[", "]" ],
-        [ "(", ")" ]
+        [ "(", ")" ],
+        [ "'", "'" ],
+        [ "\"", "\"" ]
     ]
 }
