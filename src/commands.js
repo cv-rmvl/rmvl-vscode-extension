@@ -31,9 +31,9 @@ function whatCmd() {
 }
 
 async function searchCmd() {
-    const answer = await vscode.window.showInformationMessage('要查阅 RMVL 的内容', '文档手册', '源代码', '发行说明');
-    if (answer === '文档手册')
-        vscode.commands.executeCommand('vscode.open', 'https://vision.scutbot.cn/rmvl/master');
+    const answer = await vscode.window.showInformationMessage('要查阅 RMVL 的内容', '用户手册', '源代码', '发行说明');
+    if (answer === '用户手册')
+        vscode.commands.executeCommand('vscode.open', 'https://cv-rmvl.github.io');
     else if (answer === '源代码')
         vscode.commands.executeCommand('vscode.open', 'https://github.com/cv-rmvl/rmvl');
     else if (answer === '发行说明')

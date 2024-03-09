@@ -80,11 +80,11 @@ class CMakeCIP {
         rmvlCompileOptions.documentation = strParaMap.get("rmvl_compile_options");
         // add test
         const rmvlAddTest = new vscode.CompletionItem('rmvl_add_test', vscode.CompletionItemKind.Function);
-        rmvlAddTest.insertText = new vscode.SnippetString('rmvl_add_test(\n  ${2:test_name} ${1|Unit,Performance|}\n  DEPENDS ${2:module_name}\n  DEPEND_TESTS ${2:GTest::gtest_main}\n)');
+        rmvlAddTest.insertText = new vscode.SnippetString('rmvl_add_test(\n  ${2:test_name} ${1|Unit,Performance|}\n  DEPENDS ${3:module_name}\n  DEPEND_TESTS ${4:GTest::gtest_main}\n)');
         rmvlAddTest.documentation = strParaMap.get("rmvl_add_test");
         // add exeutable
         const rmvlAddExe = new vscode.CompletionItem('rmvl_add_exe', vscode.CompletionItemKind.Function);
-        rmvlAddExe.insertText = new vscode.SnippetString('rmvl_add_exe(\n  ${1:sample_name}\n  SOURCES ${1:file_name}.cpp\n  DEPENDS ${2:module_name}\n)');
+        rmvlAddExe.insertText = new vscode.SnippetString('rmvl_add_exe(\n  ${1:sample_name}\n  SOURCES ${2:file_name}.cpp\n  DEPENDS ${3:module_name}\n)');
         rmvlAddExe.documentation = strParaMap.get("rmvl_add_exe");
         // set properties
         const rmvlSetProperties = new vscode.CompletionItem('rmvl_set_properties', vscode.CompletionItemKind.Function);
@@ -135,7 +135,7 @@ class ParaKeywordCIP {
         // keyword
         const types = [
             'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Point', 'uint8_t', 'uint16_t', 'uint32_t',
-            'uint64_t', 'float', 'double', 'string', 'Point2f', 'Point3f', 'Point2d', 'Point3d',
+            'uint64_t', 'float', 'double', 'size_t', 'string', 'Point2f', 'Point3f', 'Point2d', 'Point3d'
         ];
         // class or struct
         const classLists = [
