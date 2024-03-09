@@ -9,7 +9,7 @@ const { CMakeHP, ParaHP } = require('./hover');
  */
 function activate(context) {
     // Commands
-    context.subscriptions.push(vscode.commands.registerCommand('rmvl.command.what', whatCmd));
+    context.subscriptions.push(vscode.commands.registerCommand('rmvl.command.what', () => whatCmd(context)));
     context.subscriptions.push(vscode.commands.registerCommand('rmvl.command.search', searchCmd));
     // Completion Item Provider
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('cmake', new CMakeCIP()));

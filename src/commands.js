@@ -23,7 +23,10 @@ function getWebViewContent(context, templatePath) {
     return html;
 }
 
-function whatCmd() {
+/**
+ * @param {any} context
+ */
+function whatCmd(context) {
     const panel = vscode.window.createWebviewPanel('rmvlHelpIndex', 'RMVL 扩展使用说明', vscode.ViewColumn.One, {
         enableScripts: true
     });
