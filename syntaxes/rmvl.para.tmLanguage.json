@@ -1,150 +1,193 @@
 {
-    "name": "rmvl.para",
-    "scopeName": "source.rmvl.para",
-    "fileTypes": [
-        "para",
-        "rmvlpara"
-    ],
-    "patterns": [
+  "name": "rmvl.para",
+  "scopeName": "source.rmvl.para",
+  "fileTypes": "para",
+  "repository": {
+    "comments": {
+      "match": "#.*",
+      "name": "comment.line.number-sign.rmvl.para"
+    },
+    "types": {
+      "patterns": [
         {
-            "name": "meta.field.rmvl.para",
-            "begin": "^\\s*(string)\\b",
-            "beginCaptures": {
-                "1": {
-                    "name": "storage.type.rmvl.para"
-                }
-            },
-            "end": "$",
-            "patterns": [
-                {
-                    "begin": "=",
-                    "end": "(?=#|$)",
-                    "contentName": "string.unquoted.rmvl.para"
-                },
-                {
-                    "include": "#field"
-                }
-            ]
+          "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Point[23][fd]|Point)\\b",
+          "name": "storage.type.rmvl.para"
         },
         {
-            "name": "meta.field.rmvl.para",
-            "begin": "^\\s*(vector|(Matx[0-9]{2}|Vec[0-9])[fd])\\b",
-            "beginCaptures": {
-                "1": {
-                    "name": "support.class"
-                }
-            },
-            "end": "$",
-            "patterns": [
-                {
-                    "begin": "<",
-                    "end": ">",
-                    "include": "#types"
-                },
-                {
-                    "include": "#field"
-                }
-            ]
+          "match": "\\b(vector|(Matx[0-9]{2}|Vec[0-9])[fd])\\b",
+          "name": "support.class.rmvl.para"
         },
         {
-            "name": "meta.field.rmvl.para",
-            "begin": "^\\s*([/\\w]+)\\b",
-            "beginCaptures": {
-                "1": {
-                    "patterns": [
-                        {
-                            "include": "#types"
-                        },
-                        {
-                            "include": "#numeric-constant"
-                        }
-                    ]
-                }
-            },
-            "end": "$",
-            "patterns": [
-                {
-                    "include": "#field"
-                }
-            ]
-        },
-        {
-            "name": "meta.field.rmvl.para",
-            "begin": "^\\s*({)",
-            "end": "$",
-            "patterns": [
-                {
-                    "include": "#numeric-constant"
-                },
-                {
-                    "include": "#comments"
-                }
-            ]
-        },
-        {
-            "include": "#comments"
+          "match": "\\b(diag|zeros|ones|eye|all|randu|randn)\\b",
+          "name": "support.function.rmvl.para"
         }
-    ],
-    "repository": {
-        "field": {
-            "patterns": [
-                {
-                    "include": "#comments"
-                },
-                {
-                    "include": "#identifier"
-                },
-                {
-                    "include": "#numeric-constant"
-                },
-                {
-                    "begin": "=",
-                    "end": "$",
-                    "patterns": [
-                        {
-                            "include": "#numeric-constant"
-                        },
-                        {
-                            "include": "#comments"
-                        },
-                        {
-                            "include": "#types"
-                        }
-                    ]
-                }
-            ]
+      ]
+    },
+    "identifier": {
+      "match": "\\b[a-zA-Z](\\w+)?\\b",
+      "name": "variable.rmvl.para"
+    },
+    "enum": {
+      "match": "\\b[a-zA-Z](\\w+)?\\b",
+      "name": "variable.other.enummember.rmvl.para"
+    },
+    "numeric-constant": {
+      "patterns": [
+        {
+          "match": "\\b[+-]?(?:\\d*\\.\\d+|\\d+\\.?)([eE][+-]?\\d+)?[fFlLuU]?\\b",
+          "name": "constant.numeric.rmvl.para"
         },
-        "comments": {
-            "match": "#.*",
-            "name": "comment.line.number-sign.rmvl.para"
+        {
+          "match": "\\b0[xX][0-9a-fA-F]+\\b",
+          "name": "constant.numeric.rmvl.para"
         },
-        "types": {
-            "patterns": [
-                {
-                    "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Point[23][fd]|Point)\\b",
-                    "name": "storage.type.rmvl.para"
-                },
-                {
-                    "match": "\\b(float(32|64)_t|bool|char)\\b",
-                    "name": "invalid.deprecated.rmvl.para"
-                },
-                {
-                    "match": "\\b(vector|(Matx[0-9]{2}|Vec[0-9])[fd])\\b",
-                    "name": "support.class"
-                },
-                {
-                    "match": "\\b(diag|zeros|ones|eye|all|randu|randn)\\b",
-                    "name": "support.function"
-                }
-            ]
+        {
+          "match": "\\b0[bB][01]+\\b",
+          "name": "constant.numeric.rmvl.para"
         },
-        "identifier": {
-            "match": "\\b[a-zA-Z](\\w+)?\\b",
-            "name": "variable.parameter"
-        },
-        "numeric-constant": {
-            "match": "\\b[+-]?[0-9]*\\.?[0-9]+([eE][+-]?\\d+)?[fd]?\\b",
-            "name": "constant.numeric.rmvl.para"
+        {
+          "match": "\\b0[0-7]+\\b",
+          "name": "constant.numeric.rmvl.para"
         }
+      ]
+    },
+    "assignment": {
+      "patterns": [
+        {
+          "begin": "=",
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#numeric-constant"
+            },
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#types"
+            }
+          ]
+        },
+        {
+          "include": "#comments"
+        }
+      ]
     }
+  },
+  "patterns": [
+    {
+      "name": "meta.field.rmvl.para",
+      "begin": "^\\s*(string)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "storage.type.rmvl.para"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#identifier"
+        },
+        {
+          "begin": "=",
+          "end": "(?=#|$)",
+          "contentName": "string.quoted.double.rmvl.para"
+        },
+        {
+          "include": "#comments"
+        }
+      ]
+    },
+    {
+      "name": "meta.field.rmvl.para",
+      "begin": "^\\b(enum)\\s+([a-zA-Z_]\\w*)",
+      "beginCaptures": {
+        "1": {
+          "name": "storage.type.rmvl.para"
+        },
+        "2": {
+          "name": "support.class.rmvl.para"
+        }
+      },
+      "end": "^\\s*(endenum)",
+      "endCaptures": {
+        "1": {
+          "name": "storage.type.rmvl.para"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#enum"
+        },
+        {
+          "include": "#assignment"
+        }
+      ]
+    },
+    {
+      "name": "meta.field.rmvl.para",
+      "begin": "^\\s*(vector|(Matx[0-9]{2}|Vec[0-9])[fd])\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "support.class.rmvl.para"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "begin": "<",
+          "end": ">",
+          "include": "#types"
+        },
+        {
+          "include": "#identifier"
+        },
+        {
+          "include": "#assignment"
+        }
+      ]
+    },
+    {
+      "name": "meta.field.rmvl.para",
+      "begin": "^\\s*([/\\w]+)\\b",
+      "beginCaptures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#types"
+            },
+            {
+              "include": "#numeric-constant"
+            }
+          ]
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#identifier"
+        },
+        {
+          "include": "#assignment"
+        }
+      ]
+    },
+    {
+      "name": "meta.field.rmvl.para",
+      "begin": "^\\s*({)",
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#numeric-constant"
+        },
+        {
+          "include": "#comments"
+        }
+      ]
+    },
+    {
+      "include": "#comments"
+    }
+  ],
+  "uuid": "77cb9a71-a63a-40ec-bab8-2384a3f0b7c2"
 }
