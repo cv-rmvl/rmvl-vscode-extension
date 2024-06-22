@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const { exec } = require('child_process');
 const { posix } = require('path');
 const fs = require('fs');
 
@@ -43,6 +44,48 @@ async function searchCmd() {
         vscode.commands.executeCommand('vscode.open', 'https://github.com/cv-rmvl/rmvl/wiki/ChangeLog');
 }
 
+// 监听保存文件事件，自动执行 CMake 配置
+let outputChannel;
+
+/**
+ * @param {{ fileName: string; }} document
+ */
+function executeCMakeCfg(document) {
+    if (document.fileName.endsWith('.para')) {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (workspaceFolders && workspaceFolders.length > 0) {
+            if (!outputChannel) {
+                outputChannel = vscode.window.createOutputChannel("RMVL Parameters");
+                outputChannel.show(true);
+            }
+            // CMake 命令配置
+            const cmakeConfig = vscode.workspace.getConfiguration('cmake', workspaceFolders[0].uri);
+            const cmakeExecutablePath = cmakeConfig.get('cmakePath');
+            if (!cmakeExecutablePath) {
+                outputChannel.appendLine("[rmvl] CMake 可执行文件路径未配置，跳过此步骤");
+                return;
+            }
+            const buildDirectory = cmakeConfig.get('buildDirectory', '${workspaceFolder}/build');
+            const resolvedBuildDirectory = buildDirectory.replace('${workspaceFolder}', workspaceFolders[0].uri.fsPath);
+            const cmakeCommand = `${cmakeExecutablePath} -S ${workspaceFolders[0].uri.fsPath} -B ${resolvedBuildDirectory}`;
+            // 执行 CMake 命令
+            exec(cmakeCommand, (error, stdout, stderr) => {
+                outputChannel.appendLine(`[rmvl] ${document.fileName} 已生效，将自动运行 CMake 配置...`);
+                outputChannel.appendLine(`[proc] 命令: ${cmakeCommand}`);
+                if (error) {
+                    outputChannel.appendLine(`[rmvl] 错误: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    outputChannel.appendLine(`[rmvl] 标准错误: ${stderr}`);
+                    return;
+                }
+                outputChannel.appendLine(`[rmvl] CMake 配置成功！`);
+            });
+        }
+    }
+};
+
 module.exports = {
-    whatCmd, searchCmd
+    whatCmd, searchCmd, executeCMakeCfg
 }
