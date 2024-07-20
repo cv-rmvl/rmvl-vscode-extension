@@ -117,10 +117,8 @@ class CMakeCIP {
 
         // 初始化并包含 RMVL
         const findRMVL = new vscode.CompletionItem('FindRMVL', vscode.CompletionItemKind.Module);
-        findRMVL.insertText = new vscode.SnippetString(
-            `# include rmvl\nfind_package(RMVL REQUIRED)\nlist(APPEND CMAKE_MODULE_PATH \\\${RMVL_DIR})\n# use rmvl functions and macros\ninclude(RMVLUtils)\nset(para_template_path \"\\\${RMVL_DIR}/templates\" CACHE INTERNAL "GenPara template path")\ninclude(RMVLGenPara)\ninclude(RMVLModule)\n`
-        );
-        findRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL，并包含相关模块，包含\n- \`RMVLUtils\`\n- \`RMVLGenPara\`\n- \`RMVLModule\``);
+        findRMVL.insertText = new vscode.SnippetString(`find_package(RMVL REQUIRED)\n`);
+        findRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL`);
 
         return [
             rmvlCompileDefinition, rmvlInstallDirectories, rmvlAddModule, rmvlCompileOptions,

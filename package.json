@@ -1,14 +1,14 @@
 {
     "name": "rmvl-vscode-extension",
-    "displayName": "RMVL Parameters amd CMake",
-    "description": "RMVL extensions, including CMake extensions and parameter files",
+    "displayName": "RMVL CMake and IDL",
+    "description": "RMVL extensions, including CMake extensions and IDL",
     "icon": "./icons/icon.png",
     "keywords": [
         "rmvl",
         "cmake",
         "parameter"
     ],
-    "version": "1.3.2",
+    "version": "1.3.3",
     "repository": {
         "type": "git",
         "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
