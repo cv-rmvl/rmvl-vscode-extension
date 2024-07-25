@@ -3,11 +3,15 @@ const vscode = require('vscode');
 const strCMakeMap = new Map();
 const strParaMap = new Map();
 
-strCMakeMap.set("rmvl_compile_definition", new vscode.MarkdownString(
+strCMakeMap.set("rmvl_compile_definitions", new vscode.MarkdownString(
     `#### 将预处理定义添加至指定目标\n##### 用法:\n\`\`\`\nrmvl_compile_definitions(<target>\n  <INTERFACE | PUBLIC | PRIVATE> [items1...]\n  [<INTERFACE | PUBLIC | PRIVATE> [items2...] ...])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_compile_definitions(\n  aaa\n  INTERFACE HAVE_AAA\n)\n\`\`\``
 ));
 strCMakeMap.set("rmvl_install_directories", new vscode.MarkdownString(
     '#### 将指定路径下的所有文件安装至特定目标\n##### 用法:\n```\nrmvl_install_directories(<directory> [DST_LIB])\n```\n##### 示例:\n```\nrmvl_install_directories(include/rmvl)\n```'
+));
+
+strCMakeMap.set("rmvl_update_build", new vscode.MarkdownString(
+    `#### 更新 RMVL 目标构建的标志位，用于控制是否构建指定模块，不影响用户的选择\n- 主要更新 \`BUILD_rmvl_xxx_INIT\` 变量\n- 在满足条件时，设置 \`BUILD_rmvl_xxx_INIT\` 为 \`ON\`，否则为 \`OFF\`\n##### 用法:\n\`\`\`\nrmvl_update_build(<name> [CONDITION])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_update_build(\n  hik_camera\n  HikSDK_FOUND\n)\n\`\`\``
 ));
 strCMakeMap.set("rmvl_add_module", new vscode.MarkdownString(
     `#### 在当前目录中添加新的 RMVL 模块，并会依次添加至\n- 局部变量 \`modules_build\`\n- 缓存变量 \`RMVL_MODULES_BUILD\`\n中\n##### 用法:\n\`\`\`\nrmvl_add_module(<module_name> [INTERFACE] [EXTRA_HEADER <list of other include directories>]\n  [EXTRA_SOURCE <list of other source directories>] [DEPENDS <list of rmvl dependencies>]\n  [EXTERNAL <list of 3rd party dependencies>])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_add_module(\n  my_module               # 需要生成的模块 (文件夹名)\n  EXTRA_HEADER xxx_h      # 参与构建的除 \`include\` 文件夹以外的其余头文件目录\n  EXTRA_SOURCE xxx_src    # 参与构建的除 \`src\` 文件夹以外的其余源文件目录\n  DEPENDS core            # 依赖的 RMVL 模块 (文件夹名)\n  EXTERNAL \${OpenCV_LIBS} # 依赖的第三方目标库\n)\n\`\`\``
@@ -16,7 +20,7 @@ strCMakeMap.set("rmvl_compile_options", new vscode.MarkdownString(
     `#### 将编译选项添加至指定目标\n##### 用法:\n\`\`\`\nrmvl_compile_options(<target> [BEFORE]\n  <INTERFACE|PUBLIC|PRIVATE> [items1...]\n  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_compile_options(\n  my_module  # RMVL 目标名\n  PRIVATE -w # 编译选项\n)\n\`\`\``
 ));
 strCMakeMap.set("rmvl_add_test", new vscode.MarkdownString(
-    `#### 此命令用于为指定模块添加新的 RMVL 测试\n##### 用法:\n\`\`\`\nrmvl_add_test(<name> <Unit|Performance> <DEPENDS> [rmvl_target...]\n  <DEPEND_TESTS> [test_target...])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_add_test(\n  detector Unit                  # 测试名\n  DEPENDS armor_detector         # 需要依赖的 RMVL 目标库\n  DEPEND_TESTS GTest::gtest_main # 需要依赖的第三方测试工具目标库\n)\n\`\`\``
+    `#### 此命令用于为指定模块添加新的 RMVL 测试\n##### 用法:\n\`\`\`\nrmvl_add_test(<name> <Unit|Performance> <DEPENDS> [rmvl_target...]\n  <EXTERNAL> [test_target...])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_add_test(\n  detector Unit              # 测试名\n  DEPENDS  armor_detector    # 依赖的 RMVL 目标库\n  EXTERNAL GTest::gtest_main # 依赖的第三方目标库，一般是测试工具\n)\n\`\`\``
 ));
 strCMakeMap.set("rmvl_add_exe", new vscode.MarkdownString(
     '#### 此命令用于为指定模块添加新的 RMVL 可执行文件\n##### 用法:\n```\nrmvl_add_exe(<name> SOURCES <file_name>\n  [DEPENDS <list of rmvl dependencies>]\n  [EXTERNAL <list of 3rd party dependencies>]\n)\n```\n##### 示例:\n```\nrmvl_add_exe(\n  demo             # 可执行文件名（包含 rmvl_ 前缀）\n  SOURCES demo.cpp # 源文件\n  DEPENDS core     # 依赖的 RMVL 模块\n)\n```'
@@ -31,7 +35,7 @@ strCMakeMap.set("system_date", new vscode.MarkdownString(
     `#### 获取系统日期\n#### 用法:\n\`\`\`\nsystem_date(\n  <output year> <output month> <output day>\n)\n\`\`\`\n#### 示例:\n\`\`\`\nsystem_date(\n  year  # 年份，格式为 yyyy\n  month # 月份，格式为 mm\n  day   # 日期，格式为 dd\n)\n\`\`\``
 ));
 strCMakeMap.set("rmvl_generate_para", new vscode.MarkdownString(
-    `#### 根据指定的目标名在 \`param 文件夹下对应的 \`*.para\` 参数规范文件和可选的模块名生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_para(\n  <target_name>\n  [MODULE module_name]\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_para(\n  mytarget        # 目标名称\n  MODULE mymodule # 模块名称为 mymodule\n)\n\`\`\``
+    `#### 根据指定的目标名在 \`param\` 文件夹下对应的 \`*.para\` 参数规范文件和可选的模块名生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_para(\n  <target_name>\n  [MODULE module_name]\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_para(\n  mytarget        # 目标名称\n  MODULE mymodule # 模块名称为 mymodule\n)\n\`\`\``
 ));
 strCMakeMap.set("rmvl_generate_module_para", new vscode.MarkdownString(
     `#### 根据给定模块下所有的 para 目标，生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_module_para(\n  <module_name>\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_module_para(module_name) # 模块名\n\`\`\``
@@ -70,6 +74,10 @@ class CMakeCIP {
         const rmvlInstallDirectories = new vscode.CompletionItem('rmvl_install_directories', vscode.CompletionItemKind.Function);
         rmvlInstallDirectories.insertText = new vscode.SnippetString('rmvl_install_directories(\n  ${1:where_to_install}\n)');
         rmvlInstallDirectories.documentation = strParaMap.get("rmvl_install_directories");
+        // update build
+        const rmvlUpdateBuild = new vscode.CompletionItem('rmvl_update_build', vscode.CompletionItemKind.Function);
+        rmvlUpdateBuild.insertText = new vscode.SnippetString('rmvl_update_build(${1:module_name} ${2:condition})');
+        rmvlUpdateBuild.documentation = strParaMap.get("rmvl_update_build");
         // add module
         const rmvlAddModule = new vscode.CompletionItem('rmvl_add_module', vscode.CompletionItemKind.Function);
         rmvlAddModule.insertText = new vscode.SnippetString('rmvl_add_module(\n  ${1:module_name}\n  DEPENDS ${2:core}\n)');
@@ -80,7 +88,7 @@ class CMakeCIP {
         rmvlCompileOptions.documentation = strParaMap.get("rmvl_compile_options");
         // add test
         const rmvlAddTest = new vscode.CompletionItem('rmvl_add_test', vscode.CompletionItemKind.Function);
-        rmvlAddTest.insertText = new vscode.SnippetString('rmvl_add_test(\n  ${2:test_name} ${1|Unit,Performance|}\n  DEPENDS ${3:module_name}\n  DEPEND_TESTS ${4:GTest::gtest_main}\n)');
+        rmvlAddTest.insertText = new vscode.SnippetString('rmvl_add_test(\n  ${2:test_name} ${1|Unit,Performance|}\n  DEPENDS ${3:module_name}\n  EXTERNAL ${4:GTest::gtest_main}\n)');
         rmvlAddTest.documentation = strParaMap.get("rmvl_add_test");
         // add exeutable
         const rmvlAddExe = new vscode.CompletionItem('rmvl_add_exe', vscode.CompletionItemKind.Function);
@@ -115,15 +123,15 @@ class CMakeCIP {
         rmvlLinkLibraries.insertText = new vscode.SnippetString(`rmvl_link_libraries(\n  \${1:module_name}\n  \${2|PUBLIC,INTERFACE,PRIVATE|} \${3:mylibs}\n)`);
         rmvlLinkLibraries.documentation = strParaMap.get("rmvl_link_libraries");
 
-        // 初始化并包含 RMVL
+        // find_package RMVL
         const findRMVL = new vscode.CompletionItem('FindRMVL', vscode.CompletionItemKind.Module);
         findRMVL.insertText = new vscode.SnippetString(`find_package(RMVL REQUIRED)\n`);
         findRMVL.documentation = new vscode.MarkdownString(`使用 \`find_package\` 寻找 RMVL`);
 
         return [
-            rmvlCompileDefinition, rmvlInstallDirectories, rmvlAddModule, rmvlCompileOptions,
-            rmvlAddTest, rmvlAddExe, rmvlSetProperties, rmvlDownload, systemDate, rmvlGeneratePara,
-            rmvlGenerateModulePara, rmvlLinkDirectories, rmvlLinkLibraries, findRMVL
+            rmvlCompileDefinition, rmvlInstallDirectories, rmvlUpdateBuild, rmvlAddModule, rmvlCompileOptions, rmvlAddTest,
+            rmvlAddExe, rmvlSetProperties, rmvlDownload, systemDate, rmvlGeneratePara, rmvlGenerateModulePara, rmvlLinkDirectories,
+            rmvlLinkLibraries, findRMVL
         ];
     }
 }
@@ -178,7 +186,7 @@ class ParaKeywordCIP {
 
         const enumSnippet = new vscode.CompletionItem('enum', vscode.CompletionItemKind.Snippet);
         enumSnippet.insertText = new vscode.SnippetString('enum Flag\n  ${1}\nendenum\n');
-        
+
         completionItems.push(paraSnippet, enumSnippet);
 
         return completionItems;
