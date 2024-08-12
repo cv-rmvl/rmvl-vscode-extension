@@ -6,17 +6,17 @@
       "patterns": [
         {
           "comment": "RMVL CMake commands",
-          "match": "\\b(rmvl_compile_definitions|rmvl_install_directories|rmvl_update_build|rmvl_add_module|rmvl_compile_options|rmvl_add_test|rmvl_add_exe|rmvl_set_properties|rmvl_download|system_date|rmvl_generate_para|rmvl_generate_module_para|rmvl_link_directories|rmvl_link_libraries)\\b",
+          "match": "(?<![\"'])\\b(rmvl_compile_definitions|rmvl_install_directories|rmvl_update_build|rmvl_add_module|rmvl_compile_options|rmvl_add_test|rmvl_add_exe|rmvl_set_properties|rmvl_download|system_date|rmvl_generate_para|rmvl_generate_module_para|rmvl_link_directories|rmvl_link_libraries)\\b",
           "name": "keyword.cmake"
         },
         {
           "comment": "RMVL CMake commands Flags",
-          "match": "\\b(EXTRA_HEADER|EXTRA_SOURCE|DEPENDS|SOURCES|EXTERNAL|MODULE)\\b",
+          "match": "(?<![\"'])\\b(EXTRA_HEADER|EXTRA_SOURCE|DEPENDS|SOURCES|EXTERNAL|MODULE)\\b",
           "name": "keyword.cmake"
         },
         {
           "comment": "RMVL CMake commands Tags",
-          "match": "\\b(GIT|URL|Unit|Performance|PUBLIC|INTERFACE|PRIVATE)\\b",
+          "match": "(?<![\"'])\\b(GIT|URL|Unit|Performance|PUBLIC|INTERFACE|PRIVATE)\\b",
           "name": "variable.other.enummember.cmake"
         }
       ]
