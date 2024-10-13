@@ -10,7 +10,7 @@
     "types": {
       "patterns": [
         {
-          "match": "\\b(int|u?int(8|16|32|64)_t|size_t|float|double|string|Point[23][fd]|Point)\\b",
+          "match": "\\bbool|(int|u?int(8|16|32|64)_t|size_t|float|double|string|Point[23][fd]|Point)\\b",
           "name": "storage.type.rmvl.para"
         },
         {
@@ -47,6 +47,10 @@
       "match": "\\b[a-zA-Z](\\w+)?\\b",
       "name": "variable.other.enummember.rmvl.para"
     },
+    "boolean": {
+      "match": "\\b(true|false)\\b",
+      "name": "constant.language.rmvl.para"
+    },
     "numeric-constant": {
       "patterns": [
         {
@@ -73,6 +77,9 @@
           "begin": "=",
           "end": "$",
           "patterns": [
+            {
+              "include": "#boolean"
+            },
             {
               "include": "#numeric-constant"
             },

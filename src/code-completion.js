@@ -142,7 +142,7 @@ class ParaKeywordCIP {
         const types = [
             'int', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'Point', 'uint8_t', 'uint16_t', 'uint32_t',
             'uint64_t', 'float', 'double', 'size_t', 'string', 'Point2f', 'Point3f', 'Point2d', 'Point3d',
-            'enum', 'endenum'
+            'enum', 'endenum', 'bool', 'false', 'true'
         ];
         // class or struct
         const classLists = [
