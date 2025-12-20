@@ -1,103 +1,103 @@
 {
-    "name": "rmvl-vscode-extension",
-    "displayName": "RMVL CMake and IDL",
-    "description": "RMVL extensions, including CMake extensions and IDL",
-    "icon": "./icons/icon.png",
-    "keywords": [
-        "rmvl",
-        "cmake",
-        "parameter"
+  "name": "rmvl-vscode-extension",
+  "displayName": "RMVL CMake and IDL",
+  "description": "RMVL extensions, including CMake extensions and IDL",
+  "icon": "./icons/icon.png",
+  "keywords": [
+    "rmvl",
+    "cmake",
+    "parameter"
+  ],
+  "version": "1.5.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
+  },
+  "publisher": "zhaoxi-scut",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Snippets",
+    "Programming Languages"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onLanguage:cmake"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "title": "这是什么",
+        "category": "RMVL",
+        "command": "rmvl.command.what"
+      },
+      {
+        "title": "查阅 RMVL",
+        "category": "RMVL",
+        "command": "rmvl.command.search"
+      }
     ],
-    "version": "1.4.2",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/cv-rmvl/rmvl-vscode-extension.git"
-    },
-    "publisher": "zhaoxi-scut",
-    "engines": {
-        "vscode": "^1.75.0"
-    },
-    "categories": [
-        "Snippets",
-        "Programming Languages"
+    "keybindings": [
+      {
+        "command": "rmvl.command.what",
+        "key": "ctrl+r ctrl+w"
+      },
+      {
+        "command": "rmvl.command.search",
+        "key": "ctrl+r ctrl+s"
+      }
     ],
-    "main": "./src/extension.js",
-    "activationEvents": [
-        "onLanguage:cmake"
+    "languages": [
+      {
+        "id": "rmvl.para",
+        "aliases": [
+          "RMVL Parameters"
+        ],
+        "extensions": [
+          ".para"
+        ],
+        "configuration": "./languages/rmvl.para.configuration.json",
+        "icon": {
+          "dark": "./icons/rmvlpara.png",
+          "light": "./icons/rmvlpara.png"
+        }
+      }
     ],
-    "contributes": {
-        "commands": [
-            {
-                "title": "这是什么",
-                "category": "RMVL",
-                "command": "rmvl.command.what"
-            },
-            {
-                "title": "查阅 RMVL",
-                "category": "RMVL",
-                "command": "rmvl.command.search"
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "rmvl.command.what",
-                "key": "ctrl+r ctrl+w"
-            },
-            {
-                "command": "rmvl.command.search",
-                "key": "ctrl+r ctrl+s"
-            }
-        ],
-        "languages": [
-            {
-                "id": "rmvl.para",
-                "aliases": [
-                    "RMVL Parameters"
-                ],
-                "extensions": [
-                    ".para"
-                ],
-                "configuration": "./languages/rmvl.para.configuration.json",
-                "icon": {
-                    "dark": "./icons/rmvlpara.png",
-                    "light": "./icons/rmvlpara.png"
-                }
-            }
-        ],
-        "grammars": [
-            {
-                "language": "rmvl.para",
-                "scopeName": "source.rmvl.para",
-                "path": "./syntaxes/rmvl.para.tmLanguage.json"
-            },
-            {
-                "scopeName": "source.rmvl.cmake",
-                "path": "./syntaxes/rmvl.cmake.tmLanguage.json",
-                "injectTo": [
-                    "source.cmake"
-                ]
-            }
+    "grammars": [
+      {
+        "language": "rmvl.para",
+        "scopeName": "source.rmvl.para",
+        "path": "./syntaxes/rmvl.para.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.rmvl.cmake",
+        "path": "./syntaxes/rmvl.cmake.tmLanguage.json",
+        "injectTo": [
+          "source.cmake"
         ]
-    },
-    "scripts": {
-        "lint": "eslint .",
-        "pretest": "npm run lint",
-        "test": "node ./test/runTest.js"
-    },
-    "devDependencies": {
-        "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.0.0",
-        "@types/node": "^14.0.27",
-        "@types/vscode": "^1.75.0",
-        "eslint": "^7.6.0",
-        "glob": "^7.1.6",
-        "mocha": "^8.1.3",
-        "typescript": "^4.0.2",
-        "vscode-test": "^1.4.0"
-    },
-    "dependencies": {
-        "@microsoft/fast-element": "^1.13.0",
-        "@vscode/vsce": "^2.31.1",
-        "vsce": "^2.15.0"
-    }
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.27",
+    "@types/vscode": "^1.75.0",
+    "eslint": "^7.6.0",
+    "glob": "^7.1.6",
+    "mocha": "^11.7.5",
+    "typescript": "^4.0.2",
+    "vscode-test": "^1.4.0"
+  },
+  "dependencies": {
+    "@microsoft/fast-element": "^1.13.0",
+    "@vscode/vsce": "^2.31.1",
+    "vsce": "^1.97.0"
+  }
 }

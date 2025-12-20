@@ -1,20 +1,62 @@
+body {
+  /* 使用 VS Code 的字体和颜色变量 */
+  font-family: var(--vscode-font-family);
+  font-weight: var(--vscode-font-weight);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-editor-background);
+  padding: 20px;
+  line-height: 1.6;
+}
+
 h1 {
-    color: 888;
-    font-size: 24px;
-    margin-bottom: 16px;
+  color: var(--vscode-foreground);
+  font-size: 2em;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--vscode-editor-widget-border, #ccc);
+  padding-bottom: 10px;
+}
+
+h4 {
+  color: var(--vscode-foreground);
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+p {
+  color: var(--vscode-descriptionForeground);
+  margin-bottom: 15px;
 }
 
 ul {
-    list-style-type: disc;
-    padding-left: 20px;
-    margin: 0;
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 15px;
 }
 
-li+li {
-    margin-top: 8px;
+li {
+  margin-bottom: 8px;
 }
 
 a {
-    color: #007accef;
-    text-decoration: none;
+  /* 使用链接颜色变量 */
+  color: var(--vscode-textLink-foreground);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--vscode-textLink-activeForeground);
+  text-decoration: underline;
+}
+
+/* 高亮样式，使用按钮或输入框的颜色变量来创建对比 */
+.highlight {
+  color: var(--vscode-button-foreground);
+  background-color: var(--vscode-button-background);
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
 }

@@ -6,7 +6,7 @@
       "patterns": [
         {
           "comment": "RMVL CMake commands",
-          "match": "(?<![\"'])\\b(rmvl_compile_definitions|rmvl_install_directories|rmvl_update_build|rmvl_add_module|rmvl_compile_options|rmvl_add_test|rmvl_add_exe|rmvl_set_properties|rmvl_download|system_date|rmvl_generate_para|rmvl_generate_module_para|rmvl_link_directories|rmvl_link_libraries)\\b",
+          "match": "(?<![\"'])\\b(rmvl_compile_definitions|rmvl_install_directories|rmvl_update_build|rmvl_add_module|rmvl_compile_options|rmvl_add_test|rmvl_add_exe|rmvl_set_properties|rmvl_download|system_date|rmvl_generate_para|rmvl_generate_module_para|rmvl_generate_msg|rmvl_generate_module_msg|rmvl_link_directories|rmvl_link_libraries)\\b",
           "name": "keyword.cmake"
         },
         {
