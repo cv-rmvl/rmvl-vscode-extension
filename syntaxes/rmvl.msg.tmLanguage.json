@@ -1,0 +1,82 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "RMVL Message",
+  "scopeName": "source.rmvl.msg",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#fields"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.rmvl.msg",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "constants": {
+      "name": "meta.constant.rmvl.msg",
+      "match": "^\\s*([a-zA-Z][a-zA-Z0-9_/]*)\\s+([a-zA-Z][a-zA-Z0-9_]*)\\s*=\\s*(.*)$",
+      "captures": {
+        "1": {
+          "name": "storage.type.rmvl.msg"
+        },
+        "2": {
+          "name": "constant.other.rmvl.msg"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#string_literals"
+            },
+            {
+              "match": "[0-9]+",
+              "name": "constant.numeric.integer.rmvl.msg"
+            },
+            {
+              "match": "[0-9]*\\.[0-9]+",
+              "name": "constant.numeric.float.rmvl.msg"
+            }
+          ]
+        }
+      }
+    },
+    "fields": {
+      "name": "meta.field.rmvl.msg",
+      "match": "^\\s*([a-zA-Z][a-zA-Z0-9_/]*)(\\[([0-9]*)\\])?\\s+([a-zA-Z][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": {
+          "name": "storage.type.rmvl.msg"
+        },
+        "2": {
+          "name": "meta.array.rmvl.msg"
+        },
+        "3": {
+          "name": "constant.numeric.integer.rmvl.msg"
+        },
+        "4": {
+          "name": "variable.other.rmvl.msg"
+        }
+      }
+    },
+    "string_literals": {
+      "name": "string.quoted.double.rmvl.msg",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.rmvl.msg",
+          "match": "\\\\."
+        }
+      ]
+    }
+  }
+}
