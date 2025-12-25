@@ -2,7 +2,7 @@
 
 包含 `*.para` 参数规范文件的语法支持以及相关 CMake 宏的扩展支持
 
-#### [Repository](https://github.com/cv-rmvl/rmvl-vscode-extension.git) | [Issues](https://github.com/cv-rmvl/rmvl-vscode-extension/issues) | [RMVL Documents](https://cv-rmvl.github.io/master) | [RMVL Repository](https://github.com/cv-rmvl/rmvl.git)
+#### [Repository](https://github.com/cv-rmvl/rmvl-vscode-extension.git) | [Issues](https://github.com/cv-rmvl/rmvl-vscode-extension/issues) | [RMVL Documents](https://cv-rmvl.github.io) | [RMVL Repository](https://github.com/cv-rmvl/rmvl.git)
 
 ### 1. CMake 扩展
 
@@ -31,3 +31,12 @@
 | 矩阵类型 | 1. 包括形如 `Matx??`、`Vec?` 的类型，例如 `Matx22f`<br>2. 对标 OpenCV 的 `cv::Matx` 和 `cv::Vec`<br>3. 可使用列表初始化和相关静态函数初始化，例如 `Matx22f::eye()` |
 | 复合类型 | 1. 包括 `vector` 和形如 `Point?` 的类型<br>2. 对标 C++ 的 `std::vector` 以及 OpenCV 的`cv::Point2?` 和 `cv::Point3?`<br>3. 只能使用列表初始化，例如 `{1, 2, 3}` |
 | 枚举类型 | 1. 需要用户自定以 `enum` 开头和 `endenum` 结尾的数据类型声明<br />2. 对标 C++ 的有作用域枚举类型 `enum class`<br />3. 变量的定义上与有作用域枚举类型一致，例如 `Color COLOR_MODE = Color::RED` |
+
+#### 2.2 *.msg 消息描述文件使用方法
+
+- 目前包含
+  - 标准消息：`uint8`、`int8`、`uint16`、`int16`、`float32`、`float64`、`string`、`bool`、`char`、`Header`、`ColorRGBA` 等
+  - 几何消息：`Point`、`Point32`、`Pose`、`Transform`、`Quaternion` 等
+  - 传感器消息：`Image`、`CameraInfo`、`Imu`、`JointState` 等
+  - 复合消息：`xxx[]` 数组类型消息以及 `xxx[N]` 固定长度数组类型消息，其中 `xxx` 可为任意已定义消息类型
+- 消息描述文件扩展名为 `*.msg`，该部分扩展仅在符合该扩展名的文件中生效
