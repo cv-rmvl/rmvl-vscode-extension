@@ -247,6 +247,27 @@ class ParaFuncCIP {
   }
 }
 
+class MsgKeywordCIP {
+  provideCompletionItems() {
+    const keywordTypes = [
+      'bool', 'string', 'char', 'uint8', 'int8', 'uint16', 'int16',
+      'uint32', 'int32', 'uint64', 'int64', 'float32', 'float64'
+    ];
+    const classTypes = [
+      'Header'
+    ];
+
+    const completionItems = [];
+    for (const type of keywordTypes) {
+      completionItems.push(new vscode.CompletionItem(type, vscode.CompletionItemKind.Keyword));
+    }
+    for (const type of classTypes) {
+      completionItems.push(new vscode.CompletionItem(type, vscode.CompletionItemKind.Class));
+    }
+    return completionItems;
+  }
+}
+
 module.exports = {
-  CMakeCIP, ParaKeywordCIP, ParaFuncCIP, strCMakeMap, strParaMap
+  CMakeCIP, ParaKeywordCIP, ParaFuncCIP, MsgKeywordCIP, strCMakeMap, strParaMap
 }

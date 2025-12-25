@@ -51,7 +51,7 @@ let outputChannel;
  * @param {{ fileName: string; }} document
  */
 function executeCMakeCfg(document) {
-  if (document.fileName.endsWith('.para')) {
+  if (document.fileName.endsWith('.para') || document.fileName.endsWith('.msg')) {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders && workspaceFolders.length > 0) {
       if (!outputChannel) {

@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 
-const { CMakeCIP, ParaKeywordCIP, ParaFuncCIP } = require('./code-completion');
+const { CMakeCIP, ParaKeywordCIP, ParaFuncCIP, MsgKeywordCIP } = require('./code-completion');
 const { whatCmd, searchCmd, executeCMakeCfg } = require('./commands');
 const { CMakeHP, ParaHP } = require('./hover');
 
@@ -15,6 +15,7 @@ function activate(context) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider('cmake', new CMakeCIP()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.para', new ParaKeywordCIP()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.para', new ParaFuncCIP(), ':'));
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.msg', new MsgKeywordCIP()));
   // Hover Provider
   context.subscriptions.push(vscode.languages.registerHoverProvider('cmake', new CMakeHP()));
   context.subscriptions.push(vscode.languages.registerHoverProvider('rmvl.para', new ParaHP()));
