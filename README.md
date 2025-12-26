@@ -2,7 +2,7 @@
 
 包含 `*.para` 参数规范文件的语法支持以及相关 CMake 宏的扩展支持
 
-#### [Repository](https://github.com/cv-rmvl/rmvl-vscode-extension.git) | [Issues](https://github.com/cv-rmvl/rmvl-vscode-extension/issues) | [RMVL Documents](https://cv-rmvl.github.io) | [RMVL Repository](https://github.com/cv-rmvl/rmvl.git)
+#### [Repository](https://github.com/cv-rmvl/rmvl-vscode-extension.git) | [Issues](https://github.com/cv-rmvl/rmvl-vscode-extension/issues) | [Extension](https://marketplace.visualstudio.com/items?itemName=zhaoxi-scut.rmvl-vscode-extension) | [RMVL Documents](https://cv-rmvl.github.io) | [RMVL Repository](https://github.com/cv-rmvl/rmvl.git)
 
 ### 1. CMake 扩展
 

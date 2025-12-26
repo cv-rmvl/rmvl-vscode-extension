@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const { strCMakeMap, strParaMap } = require('./code-completion');
+const { strCMakeMap, strParaMap, strMsgMap } = require('./code-completion');
 
 class CMakeHP {
   /**
@@ -37,6 +37,24 @@ class ParaHP {
   }
 }
 
+class MsgHP {
+  /**
+   * @param {{ getWordRangeAtPosition: (arg0: any) => any; getText: (arg0: any) => any; }} document
+   * @param {any} position
+   */
+  provideHover(document, position) {
+    const wordRange = document.getWordRangeAtPosition(position);
+    const word = document.getText(wordRange);
+    // return corresponding hover information according to the word
+    let hoverText = '';
+    if (strMsgMap.has(word))
+      hoverText = strMsgMap.get(word).value;
+    // return a hover
+    const hover = new vscode.Hover(hoverText);
+    return hover;
+  }
+}
+
 module.exports = {
-  CMakeHP, ParaHP
+  CMakeHP, ParaHP, MsgHP
 }

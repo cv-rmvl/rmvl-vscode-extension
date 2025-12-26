@@ -1,8 +1,6 @@
 const vscode = require('vscode');
 
 const strCMakeMap = new Map();
-const strParaMap = new Map();
-
 strCMakeMap.set("rmvl_compile_definitions", new vscode.MarkdownString(
   `#### 将预处理定义添加至指定目标\n##### 用法:\n\`\`\`\nrmvl_compile_definitions(<target>\n  <INTERFACE | PUBLIC | PRIVATE> [items1...]\n  [<INTERFACE | PUBLIC | PRIVATE> [items2...] ...])\n\`\`\`\n##### 示例:\n\`\`\`\nrmvl_compile_definitions(\n  aaa\n  INTERFACE HAVE_AAA\n)\n\`\`\``
 ));
@@ -53,6 +51,7 @@ strCMakeMap.set("rmvl_link_libraries", new vscode.MarkdownString(
   `#### 将指定目标链接至指定的库\n#### 用法:\n\`\`\`\nrmvl_link_libraries(<target> [BEFORE]\n  <INTERFACE|PUBLIC|PRIVATE> [items1...]\n  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_link_libraries(\n  my_module    # RMVL 目标名\n  PUBLIC mylib # 链接库的名称\n)\n\`\`\`\n#### 注意:\n若使用 RMVL 目标，需要引入 rmvl_ 前缀，例如\n\`\`\`\nrmvl_link_libraries(\n  my_module\n  PUBLIC rmvl_core\n)\n\`\`\``
 ));
 
+const strParaMap = new Map();
 strParaMap.set("eye", new vscode.MarkdownString('单位矩阵'));
 strParaMap.set("diag", new vscode.MarkdownString(
   `对角矩阵，例如\n\`\`\`\nMatx33f::diag({1.2, -2.1, 4})\n\`\`\`\n生成的矩阵为\n\`\`\`\n┌ 1.2   0   0 ┐\n│  0  -2.1  0 │\n└  0    0   4 ┘\n\`\`\`\n`
@@ -69,6 +68,13 @@ strParaMap.set("randn", new vscode.MarkdownString(
   `矩阵的每一个元素均服从正态分布，例如\n\`\`\`\nMatx33f::randn(0, 1)\n\`\`\`\n生成矩阵的每一个元素均服从均值为 \`0\`，方差为 \`1\` 的正态分布`
 ));
 
+const strMsgMap = new Map();
+strMsgMap.set("Header", new vscode.MarkdownString(
+  '### 消息头\n包含序列号 seq、时间戳 stamp 和坐标系字段 frame_id'
+));
+strMsgMap.set("ColorRGBA", new vscode.MarkdownString(
+  '### 颜色\n包含红、绿、蓝以及透明度分量'
+));
 
 class CMakeCIP {
   provideCompletionItems() {
@@ -254,7 +260,7 @@ class MsgKeywordCIP {
       'uint32', 'int32', 'uint64', 'int64', 'float32', 'float64'
     ];
     const classTypes = [
-      'Header'
+      'Header', 'ColorRGBA'
     ];
 
     const completionItems = [];
@@ -269,5 +275,5 @@ class MsgKeywordCIP {
 }
 
 module.exports = {
-  CMakeCIP, ParaKeywordCIP, ParaFuncCIP, MsgKeywordCIP, strCMakeMap, strParaMap
+  CMakeCIP, ParaKeywordCIP, ParaFuncCIP, MsgKeywordCIP, strCMakeMap, strParaMap, strMsgMap
 }
