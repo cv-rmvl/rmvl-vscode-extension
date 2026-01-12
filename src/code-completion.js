@@ -41,9 +41,6 @@ strCMakeMap.set("rmvl_generate_module_para", new vscode.MarkdownString(
 strCMakeMap.set("rmvl_generate_msg", new vscode.MarkdownString(
   `#### 根据指定的目标名在 \`msg\` 文件夹下对应的 \`*.msg\` 消息类型描述文件和可选的模块名生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_msg(\n  <name>\n  [MODULE module_name]\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_msg(\n  mymsg           # 目标名称\n  MODULE mymodule # 模块名称为 mymodule\n)\n\`\`\``
 ));
-strCMakeMap.set("rmvl_generate_module_msg", new vscode.MarkdownString(
-  `#### 根据给定模块下所有的 msg 目标，生成对应的 C++ 代码\n#### 用法:\n\`\`\`\nrmvl_generate_module_msg(\n  <name>\n)\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_generate_module_msg(module_name) # 模块名\n\`\`\``
-));
 strCMakeMap.set("rmvl_link_directories", new vscode.MarkdownString(
   `#### 将指定目录添加至运行时动态库链接的搜索路径\n#### 用法:\n\`\`\`\nrmvl_link_directories(<target> [BEFORE]\n  <INTERFACE|PUBLIC|PRIVATE> [items1...]\n  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])\n\`\`\`\n#### 示例:\n\`\`\`\nrmvl_link_directories(\n  my_module              # RMVL 目标名\n  PRIVATE /path/to/mylib # 链接库的路径\n)\n\`\`\``
 ));
@@ -129,10 +126,6 @@ class CMakeCIP {
     const rmvlGenerateMsg = new vscode.CompletionItem(`rmvl_generate_msg`, vscode.CompletionItemKind.Function);
     rmvlGenerateMsg.insertText = new vscode.SnippetString(`rmvl_generate_msg(\n  \${1:msg_name}\n  MODULE \${2:module_name}\n)`);
     rmvlGenerateMsg.documentation = strParaMap.get("rmvl_generate_msg");
-    // generate module msg
-    const rmvlGenerateModuleMsg = new vscode.CompletionItem(`rmvl_generate_module_msg`, vscode.CompletionItemKind.Function);
-    rmvlGenerateModuleMsg.insertText = new vscode.SnippetString(`rmvl_generate_module_msg(\${1:module_name})`);
-    rmvlGenerateModuleMsg.documentation = strParaMap.get("rmvl_generate_module_msg");
     // link directories
     const rmvlLinkDirectories = new vscode.CompletionItem(`rmvl_link_directories`, vscode.CompletionItemKind.Function);
     rmvlLinkDirectories.insertText = new vscode.SnippetString(`rmvl_link_directories(\n  \${1:module_name}\n  \${2|PUBLIC,INTERFACE,PRIVATE|} \${3:path_to_libs}\n)`);
@@ -150,7 +143,7 @@ class CMakeCIP {
     return [
       rmvlCompileDefinition, rmvlInstallDirectories, rmvlUpdateBuild, rmvlAddModule, rmvlCompileOptions, rmvlAddTest,
       rmvlAddExe, rmvlSetProperties, rmvlDownload, systemDate, rmvlGeneratePara, rmvlGenerateModulePara,
-      rmvlGenerateMsg, rmvlGenerateModuleMsg, rmvlLinkDirectories, rmvlLinkLibraries, findRMVL
+      rmvlGenerateMsg, rmvlLinkDirectories, rmvlLinkLibraries, findRMVL
     ];
   }
 }
