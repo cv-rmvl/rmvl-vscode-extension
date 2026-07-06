@@ -12,4 +12,9 @@ suite('Extension Test Suite', () => {
 		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
 		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
 	});
+
+	test('Registers RMVL service language', async () => {
+		const languages = await vscode.languages.getLanguages();
+		assert.ok(languages.includes('rmvl.srv'));
+	});
 });

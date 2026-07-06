@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "rmvl.para",
   "scopeName": "source.rmvl.para",
   "fileTypes": "para",
@@ -75,7 +76,7 @@
       "patterns": [
         {
           "begin": "=",
-          "end": "$",
+          "end": "(?<!\\\\)$",
           "patterns": [
             {
               "include": "#boolean"
@@ -164,7 +165,7 @@
           "name": "support.class.rmvl.para"
         }
       },
-      "end": "$",
+      "end": "(?<!\\\\)$",
       "patterns": [
         {
           "begin": "<",

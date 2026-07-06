@@ -3,6 +3,7 @@ const vscode = require('vscode');
 const { CMakeCIP, ParaKeywordCIP, ParaFuncCIP, MsgKeywordCIP } = require('./code-completion');
 const { whatCmd, searchCmd, executeCMakeCfg } = require('./commands');
 const { CMakeHP, ParaHP, MsgHP } = require('./hover');
+const { IDLDefinitionProvider } = require('./definition');
 
 /**
  * @param {{ subscriptions: vscode.Disposable[]; }} context
@@ -16,10 +17,17 @@ function activate(context) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.para', new ParaKeywordCIP()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.para', new ParaFuncCIP(), ':'));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.msg', new MsgKeywordCIP()));
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider('rmvl.srv', new MsgKeywordCIP()));
   // Hover Provider
   context.subscriptions.push(vscode.languages.registerHoverProvider('cmake', new CMakeHP()));
   context.subscriptions.push(vscode.languages.registerHoverProvider('rmvl.para', new ParaHP()));
   context.subscriptions.push(vscode.languages.registerHoverProvider('rmvl.msg', new MsgHP()));
+  context.subscriptions.push(vscode.languages.registerHoverProvider('rmvl.srv', new MsgHP()));
+  // Definition Provider
+  context.subscriptions.push(vscode.languages.registerDefinitionProvider(
+    ['rmvl.para', 'rmvl.msg', 'rmvl.srv'],
+    new IDLDefinitionProvider()
+  ));
 
   context.subscriptions.push(vscode.workspace.onDidSaveTextDocument((document) => executeCMakeCfg(document)));
 }

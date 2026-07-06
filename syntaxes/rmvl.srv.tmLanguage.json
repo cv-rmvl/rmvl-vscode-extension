@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "RMVL Service",
+  "scopeName": "source.rmvl.srv",
+  "patterns": [
+    {
+      "name": "meta.separator.request-response.rmvl.srv",
+      "match": "^\\s*(---)\\s*(#.*)?$",
+      "captures": {
+        "1": {
+          "name": "keyword.control.separator.rmvl.srv"
+        },
+        "2": {
+          "name": "comment.line.number-sign.rmvl.srv"
+        }
+      }
+    },
+    {
+      "include": "source.rmvl.msg"
+    }
+  ]
+}
