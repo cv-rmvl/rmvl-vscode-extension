@@ -252,8 +252,8 @@ class ParaFuncCIP {
 class MsgKeywordCIP {
   provideCompletionItems() {
     const keywordTypes = [
-      'bool', 'string', 'char', 'time', 'uint8', 'int8', 'uint16', 'int16',
-      'uint32', 'int32', 'uint64', 'int64', 'float32', 'float64'
+      'bool', 'string', 'char', 'time', 'duration', 'uint8', 'int8', 'uint16',
+      'int16', 'uint32', 'int32', 'uint64', 'int64', 'float32', 'float64'
     ];
     const classTypes = [
       'Header', 'ColorRGBA'

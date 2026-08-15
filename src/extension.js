@@ -4,6 +4,7 @@ const { CMakeCIP, ParaKeywordCIP, ParaFuncCIP, MsgKeywordCIP } = require('./code
 const { whatCmd, searchCmd, executeCMakeCfg } = require('./commands');
 const { CMakeHP, ParaHP, MsgHP } = require('./hover');
 const { IDLDefinitionProvider } = require('./definition');
+const { registerSrvSeparatorDecorations } = require('./srv-separator');
 
 /**
  * @param {{ subscriptions: vscode.Disposable[]; }} context
@@ -30,6 +31,8 @@ function activate(context) {
   ));
 
   context.subscriptions.push(vscode.workspace.onDidSaveTextDocument((document) => executeCMakeCfg(document)));
+
+  registerSrvSeparatorDecorations(context);
 }
 
 function deactivate() { }
