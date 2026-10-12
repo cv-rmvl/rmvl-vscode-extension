@@ -35,7 +35,7 @@
           }
         },
         {
-          "match": "\\b\\w+\\b",
+          "match": "\\b[a-zA-Z_]\\w*\\b",
           "name": "support.class.rmvl.para"
         }
       ]
@@ -191,10 +191,10 @@
         "1": {
           "patterns": [
             {
-              "include": "#types"
+              "include": "#numeric-constant"
             },
             {
-              "include": "#numeric-constant"
+              "include": "#types"
             }
           ]
         }

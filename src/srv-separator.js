@@ -17,29 +17,17 @@ class SrvSeparatorDecorationController {
     this.separatorDecoration = vscode.window.createTextEditorDecorationType({
       isWholeLine: true,
       rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+      // Stretch the label container to the row width, rather than `---` width.
+      textDecoration: 'none; position: absolute; display: block; left: 0; right: 0; top: 0; height: 100%; pointer-events: none',
       before: {
         ...labelBase,
         contentText: 'Request',
-        textDecoration: 'none; position: absolute; left: 0.1rem; top: 20%; transform: translateY(-50%); z-index: 1; font-size: 0.68em; line-height: 1'
+        textDecoration: 'none; position: absolute; right: 1rem; top: 20%; transform: translateY(-50%); z-index: 1; font-size: 0.68em; line-height: 1; white-space: nowrap'
       },
       after: {
         ...labelBase,
         contentText: 'Response',
-        textDecoration: 'none; position: absolute; left: 0.1rem; top: 80%; transform: translateY(-50%); z-index: 1; font-size: 0.68em; line-height: 1'
-      }
-    });
-
-    this.dividerDecoration = vscode.window.createTextEditorDecorationType({
-      isWholeLine: true,
-      rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-      after: {
-        contentText: '\u00a0',
-        borderColor: new vscode.ThemeColor('editorWidget.border'),
-        // Percentage widths are relative to the short `---` attachment. Use the
-        // workbench viewport instead; the editor clips it at its right edge.
-        width: '100vw',
-        height: '0',
-        textDecoration: 'none; position: absolute; left: 0; top: 50%; border-width: 1px 0 0 0; border-style: solid; z-index: 0'
+        textDecoration: 'none; position: absolute; right: 1rem; top: 80%; transform: translateY(-50%); z-index: 1; font-size: 0.68em; line-height: 1; white-space: nowrap'
       }
     });
 
@@ -53,7 +41,6 @@ class SrvSeparatorDecorationController {
     if (!editor) return;
     if (editor.document.languageId !== SRV_LANGUAGE_ID) {
       editor.setDecorations(this.separatorDecoration, []);
-      editor.setDecorations(this.dividerDecoration, []);
       editor.setDecorations(this.sourceDecoration, []);
       return;
     }
@@ -71,13 +58,11 @@ class SrvSeparatorDecorationController {
     }
 
     editor.setDecorations(this.separatorDecoration, separators);
-    editor.setDecorations(this.dividerDecoration, separators);
     editor.setDecorations(this.sourceDecoration, sources);
   }
 
   dispose() {
     this.separatorDecoration.dispose();
-    this.dividerDecoration.dispose();
     this.sourceDecoration.dispose();
   }
 }
