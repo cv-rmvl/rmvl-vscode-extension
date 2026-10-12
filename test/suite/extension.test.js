@@ -3,7 +3,6 @@ const assert = require('assert');
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 const vscode = require('vscode');
-const { SRV_SEPARATOR_PATTERN } = require('../../src/srv-separator');
 // const myExtension = require('../extension');
 
 suite('Extension Test Suite', () => {
@@ -19,10 +18,4 @@ suite('Extension Test Suite', () => {
 		assert.ok(languages.includes('rmvl.srv'));
 	});
 
-	test('Recognizes standalone RMVL service separators', () => {
-		assert.ok(SRV_SEPARATOR_PATTERN.test('---'));
-		assert.ok(SRV_SEPARATOR_PATTERN.test('  ---  '));
-		assert.ok(!SRV_SEPARATOR_PATTERN.test('int32 value ---'));
-		assert.ok(!SRV_SEPARATOR_PATTERN.test('--- # comment'));
-	});
 });

@@ -76,7 +76,7 @@
       "patterns": [
         {
           "begin": "=",
-          "end": "(?<!\\\\)$",
+          "end": "(?<!\\\\)(?<!\\n)$",
           "patterns": [
             {
               "include": "#boolean"
@@ -165,7 +165,7 @@
           "name": "support.class.rmvl.para"
         }
       },
-      "end": "(?<!\\\\)$",
+      "end": "(?<!\\\\)(?<!\\n)$",
       "patterns": [
         {
           "begin": "<",
